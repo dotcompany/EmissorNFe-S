@@ -1,0 +1,6 @@
+usuario e senha para entrar no sistema
+usuario: ADM
+senha: ADM@@
+
+Rodar o projeto na pasta c:\dotcompany    porque para entrar no sistema.exe ele le o mesmo arquivo windowskey.txt o mesmo da aplicaão
+
