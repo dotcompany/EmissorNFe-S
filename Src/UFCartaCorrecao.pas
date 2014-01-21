@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, FMTBcd, DB, SqlExpr,pcnConversao,
-  Buttons, OleCtrls, SHDocVw,ShellApi, xmldom, XMLIntf, msxmldom, XMLDoc  ;
+  Buttons, OleCtrls, SHDocVw,ShellApi, xmldom, XMLIntf, msxmldom, XMLDoc, StrUtils;
 
 type
   TfrmCartaCorrecao = class(TForm)
@@ -119,6 +119,7 @@ type
     { Private declarations }
   public
     { Public declarations }
+    MemoResp : TMemo;
   end;
 
 var
@@ -135,7 +136,7 @@ procedure TfrmCartaCorrecao.Button1Click(Sender: TObject);
 var
  chave,correcao,idlote,Autorizada:string;
 begin
-ValidaCampos;
+  ValidaCampos;
   Chave := edtChave.Text;
   if Chave = '' then
    begin
@@ -167,7 +168,7 @@ ValidaCampos;
    HistoricoNFe.ParamByName('nota').Text := edtNota.Text;
    HistoricoNFe.Open;
 
-  with FNFSEletronica.ACBrNFe.CartaCorrecao.CCe.Evento.Add do
+   with FNFSEletronica.ACBrNFe.CartaCorrecao.CCe.Evento.Add do
    begin
      infEvento.chNFe := Chave;
      infEvento.cOrgao := StrToInt(edtCodigoIbgeUf.Text);
@@ -200,86 +201,104 @@ ValidaCampos;
   mmTermo.Lines.Text :='              Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:';
   }
   if(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.cStat = 100)then
-  Autorizada := 'SIM'
+    Autorizada := 'SIM'
   else
-  Autorizada :='NAO';
+    Autorizada :='NAO';
   mmTermo.Lines.Text :='Autorizada:     '+ Autorizada+'#13';
   mmTermo.Lines.Add('Reposta da CC-E:    '+ FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.xMotivo +'#13');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('                     Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:');
+  if MemoResp = nil then
+    MemoResp := TMemo.Create(Self); 
+  MemoResp.Lines.Text := UTF8Encode(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.RetWS);
+  MemoResp.Lines.SaveToFile('ccetmp.xml');
 end;
 
 
 procedure TfrmCartaCorrecao.Button2Click(Sender: TObject);
-var URL:string;
+var
+  URL : string;
 begin
- URL := 'http://nfe.sefaz.go.gov.br/nfeweb/jsp/CConsultaCompletaNFEJSF.jsf?tipoConsulta=TELA_CARTA_CORRECAO&parametroChaveAcesso='+edtChave.Text;
- ShellExecute(Handle, 'open', PChar(URL), '', '', 1);
+ // URL := 'http://nfe.sefaz.go.gov.br/nfeweb/jsp/CConsultaCompletaNFEJSF.jsf?tipoConsulta=TELA_CARTA_CORRECAO&parametroChaveAcesso='+edtChave.Text;
+ // ShellExecute(Handle, 'open', PChar(URL), '', '', 1);
+  FNFSEletronica.IMPRIMENFERAVE1.MostrarPreview := True;
+  FNFSEletronica.ACBrNFe.NotasFiscais.Clear;
+  FNFSEletronica.ACBrNFe.NotasFiscais.LoadFromString('ccetmp.xml');
+  FNFSEletronica.ACBrNFe.EventoNFe.Evento.Clear;
+  FNFSEletronica.ACBrNFe.EventoNFe.LerXMLFromString('ccetmp.xml');
+  FNFSEletronica.ACBrNFe.ImprimirEvento;
+{  FNFSEletronica.ACBrNFe.DANFE.PathPDF := PathPDF;
+  FNFSEletronica.ACBrNFeDANFERaveCB.MostrarPreview := True;
+  FNFSEletronica.ACBrNFe.NotasFiscais.Clear;
+  FNFSEletronica.ACBrNFe.NotasFiscais.LoadFromString(<XML Nota Eletrônica>);
+  FNFSEletronica.ACBrNFe.EventoNFe.Evento.Clear;
+  FNFSEletronica.ACBrNFe.EventoNFe.LerXMLFromString(<XML Evento>);
+  FNFSEletronica.ACBrNFe.ImprimirEventoPDF;}
 end;
 
 procedure TfrmCartaCorrecao.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-Action := caFree;
+  Action := caFree;
 end;
 
 procedure TfrmCartaCorrecao.FormCreate(Sender: TObject);
 var
-x: Integer;
+  x: Integer;
 begin
- edtDataEnvio.Text:= DateTimeToStr(Now);
- if FNFSEletronica.RxNotaFiscal.IsEmpty then
- begin
+  edtDataEnvio.Text:= DateTimeToStr(Now);
+  if FNFSEletronica.RxNotaFiscal.IsEmpty then
+  begin
 
- end else
- begin
-
-  FNFSEletronica.RxNotaFiscal.First;
-  for x := 0 to Pred( FNFSEletronica.RxNotaFiscal.RecordCount ) do
-   begin
-    if FNFSEletronica.RxNotaFiscalMARCADO.AsBoolean = True then
+  end
+  else
+  begin
+    FNFSEletronica.RxNotaFiscal.First;
+    for x := 0 to Pred( FNFSEletronica.RxNotaFiscal.RecordCount ) do
     begin
-      if FNFSEletronica.RxNotaFiscalSTATUS_NFE.AsString = '5' then
-      BEGIN
-        try
-          if(FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString <> '') then
-          begin
-           HistoricoNFe.Close;
-           HistoricoNFe.SQL.Text := 'SELECT * FROM HISTORICO_NFE where nota_fiscal = :nota';
-           HistoricoNFe.ParamByName('nota').Text := FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString;
-           HistoricoNFe.Open;
-           edtNota.Text :=  FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString;
-           //Pegando Codigo da ibgeuf do cliente
-           NotaClienteIbgeUf.Close;
-           NotaClienteIbgeUf.SQL.Text := 'SELECT clientes.cli_end_cod_ibgeuf from nota  inner join clientes on (nota.fil_codigo = clientes.fil_codigo) and (nota.cli_codigo = clientes.cli_codigo) ';
-           NotaClienteIbgeUf.SQL.Add('where not_nr = :nota');
-           NotaClienteIbgeUf.ParamByName('nota').Text :=  edtNota.Text;
-           NotaClienteIbgeUf.Open;
-           edtCodigoIbgeUf.text := NotaClienteIbgeUf.FieldByName('cli_end_cod_ibgeuf').text;
-          end;
-          edtChave.Text := HistoricoNFeCHAVE.AsString;
-
-          if(HistoricoNFeCARTA_CORRECAO_SEQ.Text = '0')then
-          edtSequencia.Text := '1'
-          else if(HistoricoNFeCARTA_CORRECAO_SEQ.Text = '')then
-          edtSequencia.Text := '1'
-          else if(StrToInt(HistoricoNFeCARTA_CORRECAO_SEQ.Text)>1)then
-          edtSequencia.Text :=  HistoricoNFeCARTA_CORRECAO_SEQ.Text;
-        except
-        end;
-      END
-      else
+      if FNFSEletronica.RxNotaFiscalMARCADO.AsBoolean = True then
       begin
-        MessageBoxW(Handle, 'Essa NF-e Não foi validada!', 'Carta de correção:', MB_OK + MB_ICONINFORMATION);
-        //Close;
+        if FNFSEletronica.RxNotaFiscalSTATUS_NFE.AsString = '5' then
+        begin
+          try
+            if(FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString <> '') then
+            begin
+              HistoricoNFe.Close;
+              HistoricoNFe.SQL.Text := 'SELECT * FROM HISTORICO_NFE where nota_fiscal = :nota';
+              HistoricoNFe.ParamByName('nota').Text := FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString;
+              HistoricoNFe.Open;
+              edtNota.Text :=  FNFSEletronica.RxNotaFiscalNOTA_FISCAL.AsString;
+              //Pegando Codigo da ibgeuf do cliente
+              NotaClienteIbgeUf.Close;
+              NotaClienteIbgeUf.SQL.Text := 'SELECT clientes.cli_end_cod_ibgeuf from nota  inner join clientes on (nota.fil_codigo = clientes.fil_codigo) and (nota.cli_codigo = clientes.cli_codigo) ';
+              NotaClienteIbgeUf.SQL.Add('where not_nr = :nota');
+              NotaClienteIbgeUf.ParamByName('nota').Text :=  edtNota.Text;
+              NotaClienteIbgeUf.Open;
+              edtCodigoIbgeUf.text := NotaClienteIbgeUf.FieldByName('cli_end_cod_ibgeuf').text;
+            end;
+            edtChave.Text := HistoricoNFeCHAVE.AsString;
+            if(HistoricoNFeCARTA_CORRECAO_SEQ.Text = '0')then
+              edtSequencia.Text := '1'
+            else
+              if(HistoricoNFeCARTA_CORRECAO_SEQ.Text = '')then
+                edtSequencia.Text := '1'
+              else
+                if(StrToInt(HistoricoNFeCARTA_CORRECAO_SEQ.Text)>1)then
+                  edtSequencia.Text :=  HistoricoNFeCARTA_CORRECAO_SEQ.Text;
+         except
+         end;
+        end
+        else
+        begin
+          MessageBoxW(Handle, 'Essa NF-e Não foi validada!', 'Carta de correção:', MB_OK + MB_ICONINFORMATION);
+          //Close;
+        end;
       end;
+     FNFSEletronica.RxNotaFiscal.Next;
     end;
-    FNFSEletronica.RxNotaFiscal.Next;
-   end;
- end;
-
+  end;
 end;
 
 
