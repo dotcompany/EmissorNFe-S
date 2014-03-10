@@ -106,7 +106,7 @@ object FNFSEletronica: TFNFSEletronica
     object Label3: TLabel
       Left = 321
       Top = 59
-      Width = 465
+      Width = 464
       Height = 32
       Caption = 
         'Aten'#231#227'o existe NF-e, que ainda n'#227'o foram validadas.'#13#10'Para evitar' +
@@ -817,10 +817,6 @@ object FNFSEletronica: TFNFSEletronica
     object TabSheet2: TTabSheet
       Caption = '...'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PageControl2: TPageControl
         Left = 0
         Top = 0
@@ -877,10 +873,6 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet9: TTabSheet
           Caption = 'NFe'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
@@ -6649,7 +6641,7 @@ object FNFSEletronica: TFNFSEletronica
     Left = 597
     Top = 239
     Bitmap = {
-      494C010103008403040410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101030084030C0410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

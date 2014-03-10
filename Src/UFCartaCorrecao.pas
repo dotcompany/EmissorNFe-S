@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, FMTBcd, DB, SqlExpr,pcnConversao,
-  Buttons, OleCtrls, SHDocVw,ShellApi, xmldom, XMLIntf, msxmldom, XMLDoc, StrUtils;
+  Buttons, OleCtrls, SHDocVw,ShellApi, xmldom, XMLIntf, msxmldom, XMLDoc, StrUtils, ACBrUtil;
 
 type
   TfrmCartaCorrecao = class(TForm)
@@ -112,7 +112,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
     procedure ValidaCampos;
-
+    procedure LoadXML(MyMemo: TMemo; MyWebBrowser: TWebBrowser);
 
 
   private
@@ -301,6 +301,12 @@ begin
   end;
 end;
 
+
+procedure TfrmCartaCorrecao.LoadXML(MyMemo: TMemo; MyWebBrowser: TWebBrowser);
+begin
+  MyMemo.Lines.SaveToFile(PathWithDelim(ExtractFileDir(application.ExeName))+'temp.xml');
+  MyWebBrowser.Navigate(PathWithDelim(ExtractFileDir(application.ExeName))+'temp.xml');
+end;
 
 procedure TfrmCartaCorrecao.ValidaCampos;
 begin
