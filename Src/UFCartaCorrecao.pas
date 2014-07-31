@@ -133,10 +133,10 @@ uses UFNFSEletronica, UFuncoes, UModulo;
 
 procedure TfrmCartaCorrecao.Button1Click(Sender: TObject);
 var
- chave,correcao,idlote,Autorizada:string;
+ Chave, idLote, CNPJ, nSeqEvento, Correcao,Autorizada : string;
 begin
 ValidaCampos;
-  Chave := edtChave.Text;
+  Chave := Trim(edtChave.Text);
   if Chave = '' then
    begin
      MessageDlg('Informe a chave.',mtError,[mbok],0);
@@ -166,18 +166,20 @@ ValidaCampos;
    HistoricoNFe.SQL.Text := 'SELECT * FROM HISTORICO_NFE where nota_fiscal = :nota';
    HistoricoNFe.ParamByName('nota').Text := edtNota.Text;
    HistoricoNFe.Open;
+   FNFSEletronica.ACBrNFe.EventoNFe.Evento.Clear;
 
-  with FNFSEletronica.ACBrNFe.CartaCorrecao.CCe.Evento.Add do
+  with FNFSEletronica.ACBrNFe.EventoNFe.Evento.Add do
    begin
      infEvento.chNFe := Chave;
-     infEvento.cOrgao := StrToInt(edtCodigoIbgeUf.Text);
      infEvento.CNPJ := QryFilialFIL_CNPJ.Text;//CNPJ;
+    // infEvento.cOrgao := StrToInt(edtCodigoIbgeUf.Text);
      infEvento.dhEvento := now;
-     infEvento.tpEvento := 110110;
-     InfEvento.versaoEvento := '1.00';
-     infEvento.detEvento.descEvento := 'Carta de Correção';
+     infEvento.tpEvento := teCCe;
      infEvento.detEvento.xCorrecao := Correcao;
-     infEvento.detEvento.xCondUso := '';
+
+   //  InfEvento.versaoEvento := '1.00';
+     infEvento.detEvento.descEvento := 'Carta de Correção';
+   //  infEvento.detEvento.xCondUso := '';
 
      if(HistoricoNFeAMBIENTE.Text = '2')then
        InfEvento.tpAmb := taHomologacao
@@ -186,7 +188,8 @@ ValidaCampos;
      InfEvento.nSeqEvento := strtoint(trim(edtSequencia.Text));
    end;
    // envio da carta de correção
-   FNFSEletronica.ACBrNFe.EnviarCartaCorrecao(StrToInt(idLote));
+  // FNFSEletronica.ACBrNFe.EnviarCartaCorrecao(StrToInt(idLote));
+   FNFSEletronica.ACBrNFe.EnviarEventoNFe(StrToInt(idLote));
 
   //Retorno da carta de correção
   Label4.Caption := 'Respota Carta de Correção';
@@ -199,17 +202,19 @@ ValidaCampos;
   mmTermo.Lines.Text :='Protocolo:'+XMLDocument1.ChildNodes['nProt'].TeXT+'#13';
   mmTermo.Lines.Text :='              Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:';
   }
-  if(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.cStat = 100)then
-  Autorizada := 'SIM'
-  else
-  Autorizada :='NAO';
+ // if(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.cStat = 100)then
+ // Autorizada := 'SIM'
+ // else
+ // Autorizada :='NAO';
   mmTermo.Lines.Text :='Autorizada:     '+ Autorizada+'#13';
   mmTermo.Lines.Add('Reposta da CC-E:    '+ FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.xMotivo +'#13');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('                     Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:');
-end;
+  Button2.Click;
+
+  end;
 
 
 procedure TfrmCartaCorrecao.Button2Click(Sender: TObject);

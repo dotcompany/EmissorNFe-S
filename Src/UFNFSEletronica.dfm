@@ -1,8 +1,8 @@
 object FNFSEletronica: TFNFSEletronica
-  Left = 432
-  Top = 181
+  Left = 550
+  Top = 137
   BorderStyle = bsSingle
-  Caption = 'Vers'#227'o 13.00 Emissor de NF-e.'
+  Caption = 'Vers'#227'o 13.6 Emissor de NF-e.'
   ClientHeight = 474
   ClientWidth = 811
   Color = clBtnFace
@@ -134,7 +134,7 @@ object FNFSEletronica: TFNFSEletronica
       Visible = False
     end
     object btnConsultar: TBitBtn
-      Left = 206
+      Left = 204
       Top = 61
       Width = 111
       Height = 32
@@ -382,10 +382,10 @@ object FNFSEletronica: TFNFSEletronica
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ItemHeight = 13
-      ItemIndex = 7
+      ItemIndex = 9
       ParentFont = False
       TabOrder = 2
-      Text = 'N'#227'o Validada'
+      Text = 'Todos'
       Items.Strings = (
         'Valida'#231#227'o Normal Sem Retorno'
         'Erro na Valida'#231#227'o do Arquivo'
@@ -3215,6 +3215,11 @@ object FNFSEletronica: TFNFSEletronica
     object QryItensPRO_ANP: TIntegerField
       FieldName = 'PRO_ANP'
     end
+    object QryItensTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField
+      FieldName = 'TOTALIMPOSTOTRANSPARENCIA'
+      Precision = 20
+      Size = 2
+    end
   end
   object QryParametrosNFE: TSQLQuery
     BeforeOpen = QryParametrosNFEBeforeOpen
@@ -3460,9 +3465,10 @@ object FNFSEletronica: TFNFSEletronica
       
         'Select                                                          ' +
         '                                              '
+      '    nota.fil_codigo,      '
       
-        '    nota.fil_codigo,                                            ' +
-        '                                              '
+        '    nota.TOTALIMPOSTOTRANSPARENCIA,                             ' +
+        '                                                           '
       
         '    nota.not_codigo,                                            ' +
         '                                              '
@@ -4308,8 +4314,8 @@ object FNFSEletronica: TFNFSEletronica
         ') and (nota.cli_codigo = clientes.cli_codigo) '
       'WHERE NOTA.NOT_DATAEMISSAO BETWEEN :d1 and :d2')
     SQLConnection = Modulo.SQLConexao
-    Left = 368
-    Top = 152
+    Left = 312
+    Top = 160
     object QryCadNotaFIL_CODIGO: TIntegerField
       FieldName = 'FIL_CODIGO'
       Required = True
@@ -5407,6 +5413,11 @@ object FNFSEletronica: TFNFSEletronica
     object QryCadNotaNFE_OPTANTESIMPLESNASCIONAL: TStringField
       FieldName = 'NFE_OPTANTESIMPLESNASCIONAL'
       Size = 1
+    end
+    object QryCadNotaTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField
+      FieldName = 'TOTALIMPOSTOTRANSPARENCIA'
+      Precision = 20
+      Size = 2
     end
   end
   object QryClienteaaa: TSQLQuery
@@ -6567,7 +6578,8 @@ object FNFSEletronica: TFNFSEletronica
       
         'SUM(NI.ni_cofins_valor_base_calculo)        AS ni_cofins_valor_b' +
         'ase_calculo,'
-      'SUM(NI.ni_cofins_valor)                     AS ni_cofins_valor'
+      'SUM(NI.ni_cofins_valor)                     AS ni_cofins_valor,'
+      'SUM(NI.totalimpostotransparencia)  as totalimpostotransparencia'
       'FROM NOTA_ITENS NI'
       'WHERE NI.FIL_CODIGO = :FIL_CODIGO'
       'AND NI.NOT_CODIGO = :NOT_CODIGO')
@@ -6644,12 +6656,17 @@ object FNFSEletronica: TFNFSEletronica
       Precision = 20
       Size = 2
     end
+    object QryTotaisNfeTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField
+      FieldName = 'TOTALIMPOSTOTRANSPARENCIA'
+      Precision = 20
+      Size = 2
+    end
   end
   object ImageList2: TImageList
     Left = 597
     Top = 239
     Bitmap = {
-      494C010103008403040410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103008403280410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -7390,8 +7407,8 @@ object FNFSEletronica: TFNFSEletronica
       DBF9FA3F05576964746805003833333333339302400000}
   end
   object PopupMenu2: TPopupMenu
-    Left = 713
-    Top = 141
+    Left = 513
+    Top = 13
     object EnviarviaModem1: TMenuItem
       Caption = 'Enviar selecionado para o cliente'
       OnClick = EnviarviaModem1Click
@@ -7412,8 +7429,8 @@ object FNFSEletronica: TFNFSEletronica
     end
   end
   object PopupMenu3: TPopupMenu
-    Left = 561
-    Top = 501
+    Left = 777
+    Top = 141
     object FazerbackupXMLdalista1: TMenuItem
       Caption = 'Fazer backup XML da lista'
       OnClick = FazerbackupXMLdalista1Click
@@ -7690,9 +7707,12 @@ object FNFSEletronica: TFNFSEletronica
         'NOTA,n.NT_VALORTOTALSERVICO,'
       
         'n.NOT_STATUS_NFE,C.cli_razao,C.cli_email,C.CLI_CPFCNPJ,n.NOT_DAT' +
-        'AEMISSAO '
+        'AEMISSAO,h.chave,h.caminho '
       'FROM NOTA N'
       'inner join clientes C on N.cli_codigo = C.cli_codigo'
+      
+        'left outer join historico_nfe h on n.not_numeronfe = h.nota_fisc' +
+        'al'
       ''
       '                                           ')
     SQLConnection = Modulo.SQLConexao
@@ -7750,6 +7770,15 @@ object FNFSEletronica: TFNFSEletronica
       FieldName = 'CAMINHO_PDF'
       Size = 500
       Calculated = True
+    end
+    object QryConsultaNotaCHAVE: TStringField
+      FieldName = 'CHAVE'
+      Required = True
+      Size = 44
+    end
+    object QryConsultaNotaCAMINHO: TStringField
+      FieldName = 'CAMINHO'
+      Size = 250
     end
   end
   object dsRxNotaFiscal: TDataSource
@@ -7845,6 +7874,7 @@ object FNFSEletronica: TFNFSEletronica
     ImprimirDetalhamentoEspecifico = True
     NFeCancelada = False
     LocalImpCanhoto = 0
+    ImprimeItens = True
     EspessuraBorda = 1
     TamanhoFonte_RazaoSocial = 12
     TamanhoFonte_ANTT = 10
@@ -8340,5 +8370,12 @@ object FNFSEletronica: TFNFSEletronica
     DataSet = QryCartaCorrecao
     Left = 384
     Top = 224
+  end
+  object QryVazia: TSQLQuery
+    MaxBlobSize = -1
+    Params = <>
+    SQLConnection = Modulo.SQLConexao
+    Left = 480
+    Top = 384
   end
 end

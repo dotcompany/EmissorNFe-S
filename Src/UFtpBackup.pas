@@ -45,7 +45,7 @@ Begin
  Application.ProcessMessages;
 
  Ftp.Disconnect;
- ftp.Host:= 'dotcompanyftp.no-ip.org';
+ ftp.Host:= 'dotcompanyftp.ddns.net';
  Ftp.Username:= 'dotcompany';
  ftp.Password:= 'reboot7901';
  Ftp.Connect;

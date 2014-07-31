@@ -1,6 +1,6 @@
 object frmCartaCorrecao: TfrmCartaCorrecao
-  Left = 499
-  Top = 174
+  Left = 485
+  Top = 172
   Caption = 'Carta de Corre'#231#227'o'
   ClientHeight = 497
   ClientWidth = 754
@@ -20,7 +20,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   TextHeight = 13
   object Label1: TLabel
     Left = 168
-    Top = 62
+    Top = 54
     Width = 79
     Height = 13
     Anchors = [akTop, akRight]
@@ -36,21 +36,27 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object Correcao: TLabel
     Left = 0
-    Top = 115
+    Top = 99
     Width = 50
     Height = 13
     Caption = 'Corre'#231#227'o*'
   end
   object Label4: TLabel
-    Left = 0
-    Top = 285
-    Width = 70
-    Height = 13
+    Left = 8
+    Top = 281
+    Width = 199
+    Height = 33
     Caption = 'Termos de uso'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
   end
   object Label6: TLabel
     Left = 8
-    Top = 62
+    Top = 54
     Width = 56
     Height = 13
     Anchors = [akTop, akRight]
@@ -66,7 +72,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object Label3: TLabel
     Left = 319
-    Top = 62
+    Top = 54
     Width = 74
     Height = 13
     Anchors = [akTop, akRight]
@@ -74,7 +80,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object edtNota: TEdit
     Left = 168
-    Top = 81
+    Top = 73
     Width = 121
     Height = 21
     Anchors = [akTop, akRight]
@@ -90,7 +96,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object mmCorrecao: TMemo
     Left = 0
-    Top = 134
+    Top = 118
     Width = 753
     Height = 154
     Anchors = [akLeft, akTop, akRight, akBottom]
@@ -98,9 +104,9 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object mmTermo: TMemo
     Left = 0
-    Top = 304
+    Top = 320
     Width = 753
-    Height = 159
+    Height = 143
     Anchors = [akLeft, akTop, akRight, akBottom]
     Lines.Strings = (
       
@@ -121,15 +127,15 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object edtDataEnvio: TEdit
     Left = 8
-    Top = 81
+    Top = 73
     Width = 121
     Height = 21
     Anchors = [akTop, akRight]
     TabOrder = 3
   end
   object DateTimePicker1: TDateTimePicker
-    Left = 118
-    Top = 108
+    Left = 622
+    Top = 20
     Width = 186
     Height = 21
     Date = 41326.483804768520000000
@@ -157,7 +163,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
   end
   object edtCodigoIbgeUf: TEdit
     Left = 319
-    Top = 81
+    Top = 73
     Width = 121
     Height = 21
     Anchors = [akTop, akRight]
@@ -487,7 +493,7 @@ object frmCartaCorrecao: TfrmCartaCorrecao
         '00186550010000002091000002097</chNFe><tpEvento>110110</tpEvento>' +
         '<nSeqEvento>1</nSeqEvento><dhRegEvento>2013-03-04T15:18:57-03:00' +
         '</dhRegEvento></infEvento></retEvento></retEnvEvento>')
-    Left = 496
+    Left = 632
     Top = 80
     DOMVendorDesc = 'MSXML'
   end
