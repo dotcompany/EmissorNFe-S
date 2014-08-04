@@ -1122,12 +1122,6 @@ type
     QryCadNotaCFOP_DESCRICAO: TStringField;
     QryCadNotaNOT_OBSFISCO: TStringField;
     QryCadNotaNFE_OPTANTESIMPLESNASCIONAL: TStringField;
-    QryCadNotaTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
-    QryVazia: TSQLQuery;
-    QryConsultaNotaCHAVE: TStringField;
-    QryConsultaNotaCAMINHO: TStringField;
-    QryTotaisNfeTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
-    QryItensTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
     procedure TbFecharClick(Sender: TObject);
     procedure btnStatusServicoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1438,7 +1432,7 @@ Begin
   QryCadNota.Close;
   QryCadNota.SQL.Clear;
   QryCadNota.SQL.Add('Select                                                                                                        ');
-  QryCadNota.SQL.Add('    nota.fil_codigo, nota.TOTALIMPOSTOTRANSPARENCIA,                                                          ');
+  QryCadNota.SQL.Add('    nota.fil_codigo,                                                                                          ');
   QryCadNota.SQL.Add('    nota.not_codigo,                                                                                          ');
   QryCadNota.SQL.Add('    nota.not_nr,                                                                                              ');
   QryCadNota.SQL.Add('    nota.not_especie,                                                                                         ');
@@ -2160,10 +2154,8 @@ Begin
   QryConsultaNota.Close;
   QryConsultaNota.SQL.Clear;
   QryConsultaNota.SQL.Add('SELECT N.cli_codigo,n.NOT_NUMERONFE,n.NOT_SERIE,n.data,n.NOT_TOTNOTA,n.NT_VALORTOTALSERVICO,              ');
-  QryConsultaNota.SQL.Add('n.NOT_STATUS_NFE,C.cli_razao,C.cli_email,C.CLI_CPFCNPJ,n.NOT_DATAEMISSAO,h.chave,h.caminho  FROM NOTA N            ');
+  QryConsultaNota.SQL.Add('n.NOT_STATUS_NFE,C.cli_razao,C.cli_email,C.CLI_CPFCNPJ,n.NOT_DATAEMISSAO FROM NOTA N            ');
   QryConsultaNota.SQL.Add('inner join clientes C on N.cli_codigo = C.cli_codigo                          ');
-  QryConsultaNota.SQL.Add('left outer join historico_nfe h on n.not_numeronfe = h.nota_fiscal                          ');
-
   QryConsultaNota.SQL.Add('WHERE N.FIL_CODIGO = ' + cdslookfiliaisfil_codigo.AsString);
   QryConsultaNota.SQL.Add('AND N.NOT_DATAEMISSAO BETWEEN ' + '''' + S + '''' + ' AND ' + '''' + S1 + ''' ');
   QryConsultaNota.SQL.Add('AND N.NOT_STATUS_NFE > 0                                                      ');
@@ -2222,14 +2214,12 @@ Todos}
        Application.ProcessMessages;
 
        //Gauge.Position := Gauge.Position + 1;
-       // ajuste do valor na nfe sem o servico
+
        RxNotaFiscal.Insert;
        RxNotaFiscalCOD_EMPRESA.AsInteger   := cdslookfiliaisfil_codigo.AsInteger;
        RxNotaFiscalNOTA_FISCAL.AsInteger   := QryConsultaNotaNOT_NUMERONFE.AsInteger;
        RxNotaFiscalDATA_EMISSAO.AsDateTime := QryConsultaNotaDATA.AsDateTime;
        RxNotaFiscalSERIE.AsString          := QryConsultaNotaNOT_SERIE.AsString;
-       RxNotaFiscalCAMINHO_XML.AsString    := QryConsultaNotaCAMINHO.AsString;
-       RxNotaFiscalCHAVE.AsString          := QryConsultaNotaCHAVE.AsString;
        RxNotaFiscalCOD_CLIENTE.AsInteger   := QryConsultaNotaCLI_CODIGO.AsInteger;
        RxNotaFiscalVALOR_NOTA.AsFloat      := (QryConsultaNotaNOT_TOTNOTA.AsFloat - QryConsultaNotaNT_VALORTOTALSERVICO.AsFloat);
 
@@ -2333,12 +2323,12 @@ var F, T: TPoint;
 
 begin
   inherited;
-EnviarviaModem1Click(Sender);
-//  F.X := btnEnviarEMail.Left;
-//  F.Y := btnEnviarEMail.Top + btnEnviarEMail.Height + ( Width - ClientWidth ) + 0;
 
- // T := ClientToScreen( F );
- // PopupMenu2.Popup( T.X, T.Y );
+  F.X := btnEnviarEMail.Left;
+  F.Y := btnEnviarEMail.Top + btnEnviarEMail.Height + ( Width - ClientWidth ) + 0;
+
+  T := ClientToScreen( F );
+  PopupMenu2.Popup( T.X, T.Y );
 
 end;
 
@@ -2574,6 +2564,7 @@ Begin
       End;
     End Else Begin
       AtualizaStatusNotaFiscal(sNotaFiscal, '3');
+
       btnReemitirDanfe.Enabled := True;
     End;
   End;
@@ -2591,17 +2582,7 @@ Begin
   except
   END;
 
-    ComboBox2.ItemIndex := 9;
-    btnConsultar.Click;
-
-
-        try
-        EnviarviaModem1.Click;
-        except
-        end;
-
-
-
+  btnConsultar.Click;
 End;
 
 
@@ -2666,7 +2647,7 @@ end;
 procedure TFNFSEletronica.PreencheInterfaces;
 Var
   Ok : Boolean;
-  Vendedor, Fantasia, CondicaoPagto,valorimposto,valorimposto1 : String;
+  Vendedor, Fantasia, CondicaoPagto : String;
   I, CodPis, CodOperacaoPis, CodIPI, CodCofins, CodOperacaoCofins : Integer;
   OrigemMaisSitTributaria : String;
   NI_ICMS_VALOR_BASE_CALCULO, NI_ICMS_VALOR, totaldesconto :Variant;
@@ -2694,8 +2675,7 @@ Begin
   //Gauge.Max := RxNotaFiscal.RecordCount;
   //Gauge.Position := 0;
 
-  While RxNotaFiscal.Eof = False Do
-  Begin
+  While RxNotaFiscal.Eof = False Do Begin
 
     If  (RxNotaFiscalMARCADO.AsBoolean = true) And
         ((RxNotaFiscalSTATUS_NFE.AsInteger <> 5) Or
@@ -2916,7 +2896,9 @@ Begin
                    Prod.cProd := QryItensPRO_CODIGO.AsString;
 
                     //CODIGO DE FABRICA
-                    //CODIGO DO SISTEMA     
+                    //CODIGO DO SISTEMA
+
+
 
                    if QryParametrosNFEIMPRIMENFECODIGOFABRICA.AsString = '' then
                    Prod.cProd := QryItensPRO_CODIGO.AsString;
@@ -2950,20 +2932,6 @@ Begin
                    Prod.uTrib     := QryItensNI_UNID.AsString;
                    Prod.qTrib     := QryItensNI_QTD.AsFloat;
                    Prod.vUnTrib   := Arredondar(QryItensNI_VALORUN.AsFloat,2);
-
-
-                    try
-                    valorimposto1 := '' ;
-                    valorimposto1 := 'Val.Aprox.Impostos R$' +
-                    FormatFloat( '#0.00', QryItensTOTALIMPOSTOTRANSPARENCIA.AsFloat) + ' ('+
-                    Format('%f%%',[((QryItensTOTALIMPOSTOTRANSPARENCIA.AsFloat / QryItensNI_QTD.AsFloat)*100)])  +  ' )'+
-                    ' Fonte:IBPT'  ;
-                    except
-                    valorimposto1 := '' ;
-                    end;
-
-                   infAdProd      := valorimposto1;
-                 //  infAd
                   
 
                    // arrumei para dividir o valor do frete para todas as mercadorias mudar depois...
@@ -3515,7 +3483,7 @@ Begin
                             CST             := cof99;
                             vBC             := 0;
                             pCOFINS         := 0;
-                            vCOFINS         := 0;
+                            vCOFINS         := 0;   
                             end;
                         End;
 
@@ -3537,23 +3505,15 @@ Begin
                      End;}
                    End;
                 // Fim Imposto
-                End;    
+                End;
+
                 Inc(I);
+
                 QryItens.Next;
               End;
-              // S := FormatFloat( '#0.00', cdsTitTIT_VALOR.AsFloat ) + '   DATA VENC.: ' + cdsTitTIT_VENCIMENTO.AsString + #13#10;
-              //Val.Aprox.Impostos R$339,16(40,01%) Fonte:IBPT
-              try
-              valorimposto := 'Val.Aprox.Impostos R$' +
-              FormatFloat( '#0.00', QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsFloat) + ' ('+
-              Format('%f%%',[((QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsFloat / QryCadNotaNOT_TOTNOTA.AsFloat)*100)])  +  ' )'+
-              ' Fonte:IBPT' + #13#10 + QryCadNotaNOT_OBSERVACAO.AsString ;
-              except
-              valorimposto := QryCadNotaNOT_OBSERVACAO.AsString ;
-              end;
 
               InfAdic.infAdFisco := QryCadNotaNOT_OBSFISCO.AsString   ;
-              InfAdic.infCpl     := valorimposto ;
+              InfAdic.infCpl     := QryCadNotaNOT_OBSERVACAO.AsString ;
            End;
         End;
 
@@ -3733,8 +3693,6 @@ NFe.Transp.veicTransp.RNTC := ''; // X21 - Registro Nacional de Transportador de
       Total.ICMSTot.vCOFINS      := QryTotaisNfeNI_COFINS_VALOR.AsCurrency; //QryCadNotaNOT_VALCOFINS.AsCurrency; // W14 - Valor do COFINS
       Total.ICMSTot.vOutro       := Arredondar(QryCadNotaNOT_ACRECIMO.AsCurrency,2); // W15 - Outras Despesas acessÃ³rias
       Total.ICMSTot.vNF          := Arredondar(QryCadNotaNOT_TOTNOTA.AsCurrency  - QryCadNotaNT_VALORTOTALSERVICO.AsCurrency,2 ); // W16 - Valor Total da NF-e
-      Total.ICMSTot.vTotTrib     := Arredondar(QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsCurrency,2) ;//Arredondar(QryTotaisNfeTOTALIMPOSTOTRANSPARENCIANORMAL.AsCurrency,2 ); // W16 - Valor Total da NF-e
-
       End;
     End;
 
@@ -3807,9 +3765,9 @@ End;
 procedure TFNFSEletronica.btnCancelamentoClick(Sender: TObject);
 Begin
 
- Cancelamentodiretodenfe1.Click;
+ //Cancelamentodiretodenfe1.Click;
 
- { FNFSCancelamento := TFNFSCancelamento.Create(Self);
+  FNFSCancelamento := TFNFSCancelamento.Create(Self);
 
   Try
     Modulo.codigofilial :='0';
@@ -3817,7 +3775,7 @@ Begin
     FNFSCancelamento.ShowModal;
   Finally
     FreeAndNil(FNFSCancelamento);
-  End; }
+  End;
 End;
 
 procedure TFNFSEletronica.btnImprimirClick(Sender: TObject);
@@ -4641,45 +4599,7 @@ begin
         DBGridConsulta.Canvas.Brush.Color := $00FFEFDF; // define uma cor de fundo
         DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
         DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-
-
       end;
-
-       if RxNotaFiscalSTATUS_NFE.AsString = '6' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clRed; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
- if RxNotaFiscalSTATUS_NFE.AsString = '5' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clBlue; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
-  if RxNotaFiscalSTATUS_NFE.AsString = '9' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clGreen; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
-
-
   (*destaca campo NOME*)
  { if Column.Field = RxNotaFiscalCLI_RAZAO then
     begin
@@ -4714,7 +4634,8 @@ end;
 
 procedure TFNFSEletronica.EnviarviaModem1Click(Sender: TObject);
 Var
-  Host, Porta,para : String;
+  Host, Porta : String;
+
   CC: Tstrings;
 Begin
   QryParametrosNFE.Close;
@@ -4733,24 +4654,11 @@ Begin
   //QryCliEmail.ParamByName('FIL_CODIGO').AsInteger := cdslookfiliaisfil_codigo.AsInteger;
   QryCliEmail.Open;
   EEMail.Text := '';
-  if QryCliEmailCLI_EMAIL.AsString <> '' then  begin
-  EEMail.Text := LowerCase(QryCliEmailCLI_EMAIL.AsString);
-  end else begin
+  if QryCliEmailCLI_EMAIL.AsString <> '' then
+  EEMail.Text := QryCliEmailCLI_EMAIL.AsString;
 
-    if not(InputQuery('Enviar Email', 'Digite o Email valido do cliente', para)) then
-    exit;
-    EEMail.Text := LowerCase(para);
 
-    QryVazia.Close;
-    QryVazia.SQL.Clear;
-    QryVazia.SQL.Add('UPDATE CLIENTES SET CLIENTES.CLI_EMAIL = :STATUS       ');
-    QryVazia.SQL.Add('WHERE CLI_CODIGO = '+ RxNotaFiscalCOD_CLIENTE.AsString);
-    QryVazia.ParamByName('STATUS').Value :=para;
-    QryVazia.ExecSQL;
 
-    EMailUSUARIO  := para;     
-
-  end;
 
 
   EMailSMTP     := LowerCase(QryParametrosNFENFE_EMAILSMTP.AsString);
@@ -4759,32 +4667,13 @@ Begin
   EMailASSUNTO  := QryParametrosNFENFE_EMAILASSUNTO.AsString;
   EMailMENSAGEM := QryParametrosNFENFE_EMAILMENSAGEM.AsString;
 
-  {If QryParametrosNFENFE_EMAILPORTA.AsString = '' Then Begin
+  If QryParametrosNFENFE_EMAILPORTA.AsString = '' Then Begin
      Application.MessageBox('Porta do EMail Invalida.', 'A T E N Ç Ã O', MB_OK + MB_ICONERROR);
      btnConsultar.SetFocus;
      Abort;
   End Else Begin
      EMailPorta := StrToInt(QryParametrosNFENFE_EMAILPORTA.AsString);
-  End;    }
-
-    If QryParametrosNFENFE_EMAILUSUARIO.AsString = '' Then Begin
-    if not(InputQuery('Email invalido', 'Digite o Email da Sua empresa que sera usado para NFe', para)) then
-    exit;
-
-
-    QryVazia.Close;
-    QryVazia.SQL.Clear;
-    QryVazia.SQL.Add('update NFECONF SET NFECONF.NFE_EMAILUSUARIO = :STATUS       ');
-    QryVazia.SQL.Add('WHERE FIL_CODIGO = '+ cdslookfiliaisfil_codigo.AsString ) ;
-    QryVazia.ParamByName('STATUS').Value :=para;
-
-    QryVazia.ExecSQL;
-
-    EMailUSUARIO  := para;
-
-
-    End;
-
+  End;
 
   EMailSeguro   := StrToInt(QryParametrosNFENFE_EMAILSMTPSEGURO.AsString);
 
@@ -4798,7 +4687,7 @@ Begin
   If (StrToInt(EStatus.Text) = 5) Then Begin
 
     If EEMail.Text <> '' Then Begin
-      // ver essa questão porque não eta emitindo sem o caminho toda vez que imprime
+
       If Not FileExists(CamimhoNFe) Then Begin
         Application.MessageBox('Arquivo Inexistente.', 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
         btnConsultar.SetFocus;
@@ -4808,71 +4697,29 @@ Begin
       mmEmailMsg.Clear;
 
       If CamimhoNFe <> '' Then Begin
-        mmEmailMsg.Lines.Add('');
 
-
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'NFe Emitida por: '+ CdsLookFiliaisFIL_NOME.AsString + '<br><br>'  ) ;
-
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'Segue anexo o Danfe referente a Nota Fiscal Eletrônica N. '+ RxNotaFiscalNOTA_FISCAL.AsString +' e o arquivo XML correspondente.' + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'DATA       : '+ DateToStr(Date) + ' Hora: ' + TimeToStr(Time) + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'CHAVE      : '+ RxNotaFiscalCHAVE.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'NOME/RAZÃO : '+ RxNotaFiscalRAZAO_SOCIAL.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'CNPJ/CPF   : '+  RxNotaFiscalCNPJCPF.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'SÉRIE      : '+ RxNotaFiscalSERIE.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'VALOR TOTAL NFe : '+ RxNotaFiscalVALOR_NOTA.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'EMAIL      : '+ EEMail.Text + '<br><br><br><br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'SISTEMA EMISSOR DE NFe, DotCompany Ti, www.dotcompany.com.br (62)3588-6040'+ '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'DotCompany - Sua empresa em suas mãos!'+ '<br>'  ) ;
+        mmEmailMsg.Lines.Add(EMailMENSAGEM + ' Data: ' + DateToStr(Date) + ' Hora: ' + TimeToStr(Time));
 
         AcbrNFe.NotasFiscais.Clear;
         AcbrNFe.NotasFiscais.LoadFromFile(CamimhoNFe);
 
         CC := TstringList.Create;
-        CC.Add(EEMail.Text);
-        CC.Add('nfe@dotcompany.com.br');
+        CC.Add('email_1@provedor.com');
+        CC.Add('email_2@provedor.com.br');
 
-
-        Host  := 'dragaoserv.doterp.com.br';
+        Host  := EMailSMTP;
         Porta := IntToStr(EMailPorta);
 
-                                     { //sSmtpPort,
-                                      //sSmtpUser,
-                                      //sSmtpPasswd,
-                                      //sFrom,
-                                      //sTo,
-                                      //sAssunto: String;
-                                      //sMensagem : TStrings;
-                                      //SSL : Boolean;
-                                      //EnviaPDF: Boolean = true;  ok
-                                      //sCC: TStrings=nil;
-                                      //Anexos:TStrings=nil;
-                                      //PedeConfirma: Boolean = False;
-                                      //AguardarEnvio: Boolean = False;
-                                      //NomeRemetente: String = '';
-                                      //TLS : Boolean = True;
-                                      //UsarThread: Boolean = True;
-                                      //HTML:Boolean = False);  }
-
-
-AcbrNFe.NotasFiscais.Items[0].EnviarEmail(Host
-                                                , '465'
-                                                , 'nfe@dotcompanyti.com.br'
-                                                , 'reboot1980'
+        AcbrNFe.NotasFiscais.Items[0].EnviarEmail(Host
+                                                , Porta
+                                                , EMailUSUARIO
+                                                , EMailSENHA
                                                 , EMailUSUARIO
                                                 , EEMail.Text
-                                                , '(Sistema emissor de NFe DotCompany) Segue anexo PDF/XML Ped. Numero: ' + RxNotaFiscalNOTA_FISCAL.AsString
+                                                , 'Envio do Arquivo(.xml/.PDF)'
                                                 , mmEmailMsg.Lines
-                                                , True
-                                                , True
-                                                , CC
-                                                , nil
-                                                , False
-                                                , False
-                                                , 'DotCompany'
-                                                , True
-                                                , True
-                                                , True   
-                                                );
+                                                , cbEmailSSL.Checked
+                                                , True);
         CC.Free;
 
       End

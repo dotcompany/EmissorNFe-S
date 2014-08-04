@@ -1122,12 +1122,6 @@ type
     QryCadNotaCFOP_DESCRICAO: TStringField;
     QryCadNotaNOT_OBSFISCO: TStringField;
     QryCadNotaNFE_OPTANTESIMPLESNASCIONAL: TStringField;
-    QryCadNotaTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
-    QryVazia: TSQLQuery;
-    QryConsultaNotaCHAVE: TStringField;
-    QryConsultaNotaCAMINHO: TStringField;
-    QryTotaisNfeTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
-    QryItensTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
     procedure TbFecharClick(Sender: TObject);
     procedure btnStatusServicoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1438,7 +1432,7 @@ Begin
   QryCadNota.Close;
   QryCadNota.SQL.Clear;
   QryCadNota.SQL.Add('Select                                                                                                        ');
-  QryCadNota.SQL.Add('    nota.fil_codigo, nota.TOTALIMPOSTOTRANSPARENCIA,                                                          ');
+  QryCadNota.SQL.Add('    nota.fil_codigo,                                                                                          ');
   QryCadNota.SQL.Add('    nota.not_codigo,                                                                                          ');
   QryCadNota.SQL.Add('    nota.not_nr,                                                                                              ');
   QryCadNota.SQL.Add('    nota.not_especie,                                                                                         ');
@@ -2105,7 +2099,7 @@ End;
 
 procedure TFNFSEletronica.FormShow(Sender: TObject);
 Begin
- ABREDADOS;
+  ABREDADOS;
 End;
 
 procedure TFNFSEletronica.ProgressBackupProgress(Sender: TObject;
@@ -2160,10 +2154,8 @@ Begin
   QryConsultaNota.Close;
   QryConsultaNota.SQL.Clear;
   QryConsultaNota.SQL.Add('SELECT N.cli_codigo,n.NOT_NUMERONFE,n.NOT_SERIE,n.data,n.NOT_TOTNOTA,n.NT_VALORTOTALSERVICO,              ');
-  QryConsultaNota.SQL.Add('n.NOT_STATUS_NFE,C.cli_razao,C.cli_email,C.CLI_CPFCNPJ,n.NOT_DATAEMISSAO,h.chave,h.caminho  FROM NOTA N            ');
+  QryConsultaNota.SQL.Add('n.NOT_STATUS_NFE,C.cli_razao,C.cli_email,C.CLI_CPFCNPJ,n.NOT_DATAEMISSAO FROM NOTA N            ');
   QryConsultaNota.SQL.Add('inner join clientes C on N.cli_codigo = C.cli_codigo                          ');
-  QryConsultaNota.SQL.Add('left outer join historico_nfe h on n.not_numeronfe = h.nota_fiscal                          ');
-
   QryConsultaNota.SQL.Add('WHERE N.FIL_CODIGO = ' + cdslookfiliaisfil_codigo.AsString);
   QryConsultaNota.SQL.Add('AND N.NOT_DATAEMISSAO BETWEEN ' + '''' + S + '''' + ' AND ' + '''' + S1 + ''' ');
   QryConsultaNota.SQL.Add('AND N.NOT_STATUS_NFE > 0                                                      ');
@@ -2222,14 +2214,12 @@ Todos}
        Application.ProcessMessages;
 
        //Gauge.Position := Gauge.Position + 1;
-       // ajuste do valor na nfe sem o servico
+
        RxNotaFiscal.Insert;
        RxNotaFiscalCOD_EMPRESA.AsInteger   := cdslookfiliaisfil_codigo.AsInteger;
        RxNotaFiscalNOTA_FISCAL.AsInteger   := QryConsultaNotaNOT_NUMERONFE.AsInteger;
        RxNotaFiscalDATA_EMISSAO.AsDateTime := QryConsultaNotaDATA.AsDateTime;
        RxNotaFiscalSERIE.AsString          := QryConsultaNotaNOT_SERIE.AsString;
-       RxNotaFiscalCAMINHO_XML.AsString    := QryConsultaNotaCAMINHO.AsString;
-       RxNotaFiscalCHAVE.AsString          := QryConsultaNotaCHAVE.AsString;
        RxNotaFiscalCOD_CLIENTE.AsInteger   := QryConsultaNotaCLI_CODIGO.AsInteger;
        RxNotaFiscalVALOR_NOTA.AsFloat      := (QryConsultaNotaNOT_TOTNOTA.AsFloat - QryConsultaNotaNT_VALORTOTALSERVICO.AsFloat);
 
@@ -2333,30 +2323,31 @@ var F, T: TPoint;
 
 begin
   inherited;
-EnviarviaModem1Click(Sender);
-//  F.X := btnEnviarEMail.Left;
-//  F.Y := btnEnviarEMail.Top + btnEnviarEMail.Height + ( Width - ClientWidth ) + 0;
 
- // T := ClientToScreen( F );
- // PopupMenu2.Popup( T.X, T.Y );
+  F.X := btnEnviarEMail.Left;
+  F.Y := btnEnviarEMail.Top + btnEnviarEMail.Height + ( Width - ClientWidth ) + 0;
+
+  T := ClientToScreen( F );
+  PopupMenu2.Popup( T.X, T.Y );
 
 end;
 
 procedure TFNFSEletronica.FormKeyPress(Sender: TObject; var Key: Char);
 Var Z : Integer;
 Begin
-   If Key =  #13 Then Begin
-      Key := #0;
-      SelectNext(ActiveControl, True, True);
+   If Key =  #13 Then
+   Begin
+     Key := #0;
+     SelectNext(ActiveControl, True, True);
    End;
 
-   If key = #27 Then Begin
-
-      Z := Application.MessageBox ('Tem certeza que deseja sair do formulário?', 'A T E N Ç Ã O', MB_YESNO+MB_ICONQUESTION+MB_DEFBUTTON2);
-
-      If Z = MrYes Then Begin
-         Close;
-      End;
+   If key = #27 Then
+   Begin
+     Z := Application.MessageBox ('Tem certeza que deseja sair do formulário?', 'A T E N Ç Ã O', MB_YESNO+MB_ICONQUESTION+MB_DEFBUTTON2);
+     If Z = MrYes Then
+     Begin
+       Close;
+     End;
    End;
 End;
 
@@ -2387,36 +2378,37 @@ Var
   cnpj:string;
   stats,Modo:string;
 Begin
-    y:=0;
-    if RxNotaFiscal.IsEmpty then begin
+  y:=0;
+  if RxNotaFiscal.IsEmpty then
+  begin
     Application.MessageBox('Não existe NF-e No Grid!' + #13#10 +
       'Realize primeiramente uma pesquisa!', 'ATENÇÃO!', MB_OK + MB_ICONSTOP);
     Abort;
-    end;
-    RxNotaFiscal.First;
-    for x := 0 to Pred( RxNotaFiscal.RecordCount ) do
-    begin
+  end;
+  RxNotaFiscal.First;
+  for x := 0 to Pred( RxNotaFiscal.RecordCount ) do
+  begin
     if RxNotaFiscalMARCADO.AsBoolean = True then
     y  :=  y+1;
     RxNotaFiscal.Next;
-    end;
-    if y < 1 then
-    begin
+  end;
+  if y < 1 then
+  begin
     Application.MessageBox('Não existe NF-e Selecionada No Grid!' + #13#10 +
       'Clique com o mouse sobre a NF-e, e tente novamente!', 'ATENÇÃO!', MB_OK
       + MB_ICONSTOP);
     DBGridConsulta.SetFocus;
     Abort;
-    end;
+  end;
 
-    if RxNotaFiscalSTATUS_NFE.AsString = '5' then
-    BEGIN
+  if RxNotaFiscalSTATUS_NFE.AsString = '5' then
+  BEGIN
     MessageBoxW(Handle, 'Essa NF-e já foi validade!' + #13#10 +
-      'Vamos consulta-la novamente!', 'NOTAS EXPLICATIVAS:', MB_OK +
-      MB_ICONINFORMATION);
+    'Vamos consulta-la novamente!', 'NOTAS EXPLICATIVAS:', MB_OK +
+    MB_ICONINFORMATION);
     ConsultaStatusNFe1.Click;
     Abort;
-    END;
+  END;
 
   AcbrNFe.NotasFiscais.Clear;
 
@@ -2438,8 +2430,8 @@ Begin
   AcbrNFe.WebServices.Retorno.Recibo := NumeroRecibo;
   AcbrNFe.WebServices.Retorno.Executar;
 
-  For I := 0 To (AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Count - 1) Do Begin
-
+  For I := 0 To (AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Count - 1) Do
+  Begin
     sDataHora   := DateTimeToStr(AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[I].dhRecbto);
     sNotaFiscal := StrToInt(Copy(AcbrNFe.NotasFiscais.Items[I].NFe.procNFe.chNFe, 26, 9));
     sSerie      := Copy(AcbrNFe.NotasFiscais.Items[I].NFe.procNFe.chNFe, 25, 1);
@@ -2454,125 +2446,128 @@ Begin
     CdsHistoricoNFe.close;
     CdsHistoricoNFe.Open;
 
-    If CdsHistoricoNFe.RecordCount = 0 Then Begin
-        HistoricoNFe.Close;
-        HistoricoNFe.SQL.Clear;
-        HistoricoNFe.SQL.Add('INSERT INTO HISTORICO_NFE ');
-        HistoricoNFe.SQL.Add('      (STATUS,            ');
-        HistoricoNFe.SQL.Add('       SEQUENCIA,         ');
-        HistoricoNFe.SQL.Add('       COD_EMPRESA,       ');
-        HistoricoNFe.SQL.Add('       NOTA_FISCAL,       ');
-        HistoricoNFe.SQL.Add('       SERIE,             ');
-        HistoricoNFe.SQL.Add('       DATA_EMISSAO,      ');
-        HistoricoNFe.SQL.Add('       CHAVE,             ');
-        HistoricoNFe.SQL.Add('       AMBIENTE,          ');
-        HistoricoNFe.SQL.Add('       MODELO,            ');
-        HistoricoNFe.SQL.Add('       PROTOCOLO,         ');
-        HistoricoNFe.SQL.Add('       COD_CLIENTE,       ');
-        HistoricoNFe.SQL.Add('       CAMINHO,           ');
-        HistoricoNFe.SQL.Add('       RECIBO,            ');
-        HistoricoNFe.SQL.Add('       FIL_CODIGO,        ');
-        HistoricoNFe.SQL.Add('       FIL_CNPJ)          ');
+    If CdsHistoricoNFe.RecordCount = 0 Then
+    Begin
+      HistoricoNFe.Close;
+      HistoricoNFe.SQL.Clear;
+      HistoricoNFe.SQL.Add('INSERT INTO HISTORICO_NFE ');
+      HistoricoNFe.SQL.Add('      (STATUS,            ');
+      HistoricoNFe.SQL.Add('       SEQUENCIA,         ');
+      HistoricoNFe.SQL.Add('       COD_EMPRESA,       ');
+      HistoricoNFe.SQL.Add('       NOTA_FISCAL,       ');
+      HistoricoNFe.SQL.Add('       SERIE,             ');
+      HistoricoNFe.SQL.Add('       DATA_EMISSAO,      ');
+      HistoricoNFe.SQL.Add('       CHAVE,             ');
+      HistoricoNFe.SQL.Add('       AMBIENTE,          ');
+      HistoricoNFe.SQL.Add('       MODELO,            ');
+      HistoricoNFe.SQL.Add('       PROTOCOLO,         ');
+      HistoricoNFe.SQL.Add('       COD_CLIENTE,       ');
+      HistoricoNFe.SQL.Add('       CAMINHO,           ');
+      HistoricoNFe.SQL.Add('       RECIBO,            ');
+      HistoricoNFe.SQL.Add('       FIL_CODIGO,        ');
+      HistoricoNFe.SQL.Add('       FIL_CNPJ)          ');
 
-        HistoricoNFe.SQL.Add('VALUES (:STATUS,          ');
-        HistoricoNFe.SQL.Add('        :SEQUENCIA,       ');
-        HistoricoNFe.SQL.Add('        :COD_EMPRESA,     ');
-        HistoricoNFe.SQL.Add('        :NOTA_FISCAL,     ');
-        HistoricoNFe.SQL.Add('        :SERIE,           ');
-        HistoricoNFe.SQL.Add('        :DATA_EMISSAO,    ');
-        HistoricoNFe.SQL.Add('        :CHAVE,           ');
-        HistoricoNFe.SQL.Add('        :AMBIENTE,        ');
-        HistoricoNFe.SQL.Add('        :MODELO,          ');
-        HistoricoNFe.SQL.Add('        :PROTOCOLO,       ');
-        HistoricoNFe.SQL.Add('        :COD_CLIENTE,     ');
-        HistoricoNFe.SQL.Add('        :CAMINHO,         ');
-        HistoricoNFe.SQL.Add('        :RECIBO,          ');
-        HistoricoNFe.SQL.Add('        :FIL_CODIGO,     ');
-        HistoricoNFe.SQL.Add('        :FIL_CNPJ)       ');
+      HistoricoNFe.SQL.Add('VALUES (:STATUS,          ');
+      HistoricoNFe.SQL.Add('        :SEQUENCIA,       ');
+      HistoricoNFe.SQL.Add('        :COD_EMPRESA,     ');
+      HistoricoNFe.SQL.Add('        :NOTA_FISCAL,     ');
+      HistoricoNFe.SQL.Add('        :SERIE,           ');
+      HistoricoNFe.SQL.Add('        :DATA_EMISSAO,    ');
+      HistoricoNFe.SQL.Add('        :CHAVE,           ');
+      HistoricoNFe.SQL.Add('        :AMBIENTE,        ');
+      HistoricoNFe.SQL.Add('        :MODELO,          ');
+      HistoricoNFe.SQL.Add('        :PROTOCOLO,       ');
+      HistoricoNFe.SQL.Add('        :COD_CLIENTE,     ');
+      HistoricoNFe.SQL.Add('        :CAMINHO,         ');
+      HistoricoNFe.SQL.Add('        :RECIBO,          ');
+      HistoricoNFe.SQL.Add('        :FIL_CODIGO,     ');
+      HistoricoNFe.SQL.Add('        :FIL_CNPJ)       ');
 
-        QryMaximo.Close;
-        QryMaximo.SQL.Clear;
-        QryMaximo.SQL.Add('SELECT MAX(SEQUENCIA) + 1 AS TOTAL ');
-        QryMaximo.SQL.Add('FROM HISTORICO_NFE                 ');
+      QryMaximo.Close;
+      QryMaximo.SQL.Clear;
+      QryMaximo.SQL.Add('SELECT MAX(SEQUENCIA) + 1 AS TOTAL ');
+      QryMaximo.SQL.Add('FROM HISTORICO_NFE                 ');
 
-        CdsQryMaximo.close;
-        CdsQryMaximo.Open;
+      CdsQryMaximo.close;
+      CdsQryMaximo.Open;
 
-        If CdsQryMaximo.RecordCount > 0 Then Begin
-          _Sequencia := CdsQryMaximoTOTAL.AsInteger + 1;
-        End Else Begin
+      If CdsQryMaximo.RecordCount > 0 Then
+      Begin
+        _Sequencia := CdsQryMaximoTOTAL.AsInteger + 1;
+      End
+      Else
+        Begin
           _Sequencia := CdsQryMaximoTOTAL.AsInteger;
         End;
 
-        HistoricoNFe.ParamByName('STATUS').Value         := IntToStr(AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[I].cStat);
-        HistoricoNFe.ParamByName('SEQUENCIA').AsInteger  :=_Sequencia;
-        HistoricoNFe.ParamByName('COD_EMPRESA').Value    := CdsLookFiliaisEMP_CODIGO.AsInteger;
-        HistoricoNFe.ParamByName('NOTA_FISCAL').Value    := sNotaFiscal;
-        HistoricoNFe.ParamByName('SERIE').Value          := sSerie;
-        HistoricoNFe.ParamByName('DATA_EMISSAO').AsDate  := Date;
-        HistoricoNFe.ParamByName('CHAVE').Value          := AcbrNFe.WebServices.Retorno.ChaveNFe;
-        HistoricoNFe.ParamByName('AMBIENTE').Value       := Copy(QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString, 1, 1);
-        HistoricoNFe.ParamByName('MODELO').Value         := '55';
-        HistoricoNFe.ParamByName('PROTOCOLO').Value      := AcbrNFe.WebServices.Retorno.Protocolo;
+      HistoricoNFe.ParamByName('STATUS').Value         := IntToStr(AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[I].cStat);
+      HistoricoNFe.ParamByName('SEQUENCIA').AsInteger  :=_Sequencia;
+      HistoricoNFe.ParamByName('COD_EMPRESA').Value    := CdsLookFiliaisEMP_CODIGO.AsInteger;
+      HistoricoNFe.ParamByName('NOTA_FISCAL').Value    := sNotaFiscal;
+      HistoricoNFe.ParamByName('SERIE').Value          := sSerie;
+      HistoricoNFe.ParamByName('DATA_EMISSAO').AsDate  := Date;
+      HistoricoNFe.ParamByName('CHAVE').Value          := AcbrNFe.WebServices.Retorno.ChaveNFe;
+      HistoricoNFe.ParamByName('AMBIENTE').Value       := Copy(QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString, 1, 1);
+      HistoricoNFe.ParamByName('MODELO').Value         := '55';
+      HistoricoNFe.ParamByName('PROTOCOLO').Value      := AcbrNFe.WebServices.Retorno.Protocolo;
 
-        HistoricoNFe.ParamByName('COD_CLIENTE').Value    := QryCadNotaCLI_CODIGO.AsInteger;
-        HistoricoNFe.ParamByName('CAMINHO').Value        := QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
-        HistoricoNFe.ParamByName('FIL_CODIGO').Value     := CdsLookFiliaisFIL_CODIGO.AsInteger;
-        HistoricoNFe.ParamByName('RECIBO').Value         := AcbrNFe.WebServices.Retorno.Recibo;
-        HistoricoNFe.ParamByName('FIL_CNPJ').Value       := CdsLookFiliaisFIL_CNPJ.AsString;
-        HistoricoNFe.ExecSQL;
+      HistoricoNFe.ParamByName('COD_CLIENTE').Value    := QryCadNotaCLI_CODIGO.AsInteger;
+      HistoricoNFe.ParamByName('CAMINHO').Value        := QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
+      HistoricoNFe.ParamByName('FIL_CODIGO').Value     := CdsLookFiliaisFIL_CODIGO.AsInteger;
+      HistoricoNFe.ParamByName('RECIBO').Value         := AcbrNFe.WebServices.Retorno.Recibo;
+      HistoricoNFe.ParamByName('FIL_CNPJ').Value       := CdsLookFiliaisFIL_CNPJ.AsString;
+      HistoricoNFe.ExecSQL;
     End;
 
     // Envio
     Status := AcbrNFe.WebServices.Retorno.NFeRetorno.ProtNFe.Items[I].cStat;
 
-    If Status <> 9999 Then Begin
-
+    If Status <> 9999 Then
+    Begin
       Case Status Of
-      103 :  Begin
+        103 : Begin
                 btnReemitirDanfe.Enabled := False;
                 btnValidarNFe.Enabled    := True;
                 btnConsultar.Enabled     := True;
-             End;
+              End;
 
-      9000 : Begin
-                btnReemitirDanfe.Enabled := False;
-                btnValidarNFe.Enabled    := True;
-                btnConsultar.Enabled     := True;
-             End;
+        9000 : Begin
+                 btnReemitirDanfe.Enabled := False;
+                 btnValidarNFe.Enabled    := True;
+                 btnConsultar.Enabled     := True;
+               End;
       End;
 
       // Atualiza Número Recibo e Status NF-e
-      If fContingencia = '1' Then Begin
-
+      If fContingencia = '1' Then
+      Begin
         // Normal
         Case Status Of
-        100  : AtualizaStatusNotaFiscal(sNotaFiscal, '5');
-
-        103  : AtualizaStatusNotaFiscal(sNotaFiscal, '1');
-
-        9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
+          100  : AtualizaStatusNotaFiscal(sNotaFiscal, '5');
+          103  : AtualizaStatusNotaFiscal(sNotaFiscal, '1');
+          9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
         End;
       End
-      Else If fContingencia = '2' Then Begin
-
-        // Contigencia
-        Case Status Of
-        103  : AtualizaStatusNotaFiscal(sNotaFiscal, '3');
-
-        9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
+      Else
+        If fContingencia = '2' Then
+        Begin
+          // Contigencia
+          Case Status Of
+            103  : AtualizaStatusNotaFiscal(sNotaFiscal, '3');
+            9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
+          End;
+        End
+        Else
+        Begin
+          // Contigencia
+          Case Status Of
+            103  : AtualizaStatusNotaFiscal(sNotaFiscal, '4');
+            9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
+          End;
         End;
-      End
-      Else Begin
-
-        // Contigencia
-        Case Status Of
-        103  : AtualizaStatusNotaFiscal(sNotaFiscal, '4');
-
-        9000 : AtualizaStatusNotaFiscal(sNotaFiscal, '2');
-        End;
-      End;
-    End Else Begin
+    End
+    Else
+    Begin
       AtualizaStatusNotaFiscal(sNotaFiscal, '3');
       btnReemitirDanfe.Enabled := True;
     End;
@@ -2581,27 +2576,16 @@ Begin
   AcbrNFe.NotasFiscais.Clear;
   // ENVIO DE XML PARA SITE!
   TRY
-  Mensagens(Status);
-  arquivos_backup[0] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
-  arquivos_backup[1] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
-  cnpj := CdsLookFiliaisFIL_CNPJ.AsString;
-  stats :=  IntToStr(Status);
-  Modo := QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString;
-  EnviaBackupFtp(cnpj,stats,arquivos_backup,Modo);
+    Mensagens(Status);
+    arquivos_backup[0] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
+    arquivos_backup[1] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
+    cnpj := CdsLookFiliaisFIL_CNPJ.AsString;
+    stats :=  IntToStr(Status);
+    Modo := QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString;
+    EnviaBackupFtp(cnpj,stats,arquivos_backup,Modo);
   except
   END;
-
-    ComboBox2.ItemIndex := 9;
-    btnConsultar.Click;
-
-
-        try
-        EnviarviaModem1.Click;
-        except
-        end;
-
-
-
+  btnConsultar.Click;
 End;
 
 
@@ -2666,7 +2650,7 @@ end;
 procedure TFNFSEletronica.PreencheInterfaces;
 Var
   Ok : Boolean;
-  Vendedor, Fantasia, CondicaoPagto,valorimposto,valorimposto1 : String;
+  Vendedor, Fantasia, CondicaoPagto : String;
   I, CodPis, CodOperacaoPis, CodIPI, CodCofins, CodOperacaoCofins : Integer;
   OrigemMaisSitTributaria : String;
   NI_ICMS_VALOR_BASE_CALCULO, NI_ICMS_VALOR, totaldesconto :Variant;
@@ -2694,8 +2678,7 @@ Begin
   //Gauge.Max := RxNotaFiscal.RecordCount;
   //Gauge.Position := 0;
 
-  While RxNotaFiscal.Eof = False Do
-  Begin
+  While RxNotaFiscal.Eof = False Do Begin
 
     If  (RxNotaFiscalMARCADO.AsBoolean = true) And
         ((RxNotaFiscalSTATUS_NFE.AsInteger <> 5) Or
@@ -2916,7 +2899,9 @@ Begin
                    Prod.cProd := QryItensPRO_CODIGO.AsString;
 
                     //CODIGO DE FABRICA
-                    //CODIGO DO SISTEMA     
+                    //CODIGO DO SISTEMA
+
+
 
                    if QryParametrosNFEIMPRIMENFECODIGOFABRICA.AsString = '' then
                    Prod.cProd := QryItensPRO_CODIGO.AsString;
@@ -2950,20 +2935,6 @@ Begin
                    Prod.uTrib     := QryItensNI_UNID.AsString;
                    Prod.qTrib     := QryItensNI_QTD.AsFloat;
                    Prod.vUnTrib   := Arredondar(QryItensNI_VALORUN.AsFloat,2);
-
-
-                    try
-                    valorimposto1 := '' ;
-                    valorimposto1 := 'Val.Aprox.Impostos R$' +
-                    FormatFloat( '#0.00', QryItensTOTALIMPOSTOTRANSPARENCIA.AsFloat) + ' ('+
-                    Format('%f%%',[((QryItensTOTALIMPOSTOTRANSPARENCIA.AsFloat / QryItensNI_QTD.AsFloat)*100)])  +  ' )'+
-                    ' Fonte:IBPT'  ;
-                    except
-                    valorimposto1 := '' ;
-                    end;
-
-                   infAdProd      := valorimposto1;
-                 //  infAd
                   
 
                    // arrumei para dividir o valor do frete para todas as mercadorias mudar depois...
@@ -3515,7 +3486,7 @@ Begin
                             CST             := cof99;
                             vBC             := 0;
                             pCOFINS         := 0;
-                            vCOFINS         := 0;
+                            vCOFINS         := 0;   
                             end;
                         End;
 
@@ -3537,23 +3508,15 @@ Begin
                      End;}
                    End;
                 // Fim Imposto
-                End;    
+                End;
+
                 Inc(I);
+
                 QryItens.Next;
               End;
-              // S := FormatFloat( '#0.00', cdsTitTIT_VALOR.AsFloat ) + '   DATA VENC.: ' + cdsTitTIT_VENCIMENTO.AsString + #13#10;
-              //Val.Aprox.Impostos R$339,16(40,01%) Fonte:IBPT
-              try
-              valorimposto := 'Val.Aprox.Impostos R$' +
-              FormatFloat( '#0.00', QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsFloat) + ' ('+
-              Format('%f%%',[((QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsFloat / QryCadNotaNOT_TOTNOTA.AsFloat)*100)])  +  ' )'+
-              ' Fonte:IBPT' + #13#10 + QryCadNotaNOT_OBSERVACAO.AsString ;
-              except
-              valorimposto := QryCadNotaNOT_OBSERVACAO.AsString ;
-              end;
 
               InfAdic.infAdFisco := QryCadNotaNOT_OBSFISCO.AsString   ;
-              InfAdic.infCpl     := valorimposto ;
+              InfAdic.infCpl     := QryCadNotaNOT_OBSERVACAO.AsString ;
            End;
         End;
 
@@ -3733,8 +3696,6 @@ NFe.Transp.veicTransp.RNTC := ''; // X21 - Registro Nacional de Transportador de
       Total.ICMSTot.vCOFINS      := QryTotaisNfeNI_COFINS_VALOR.AsCurrency; //QryCadNotaNOT_VALCOFINS.AsCurrency; // W14 - Valor do COFINS
       Total.ICMSTot.vOutro       := Arredondar(QryCadNotaNOT_ACRECIMO.AsCurrency,2); // W15 - Outras Despesas acessÃ³rias
       Total.ICMSTot.vNF          := Arredondar(QryCadNotaNOT_TOTNOTA.AsCurrency  - QryCadNotaNT_VALORTOTALSERVICO.AsCurrency,2 ); // W16 - Valor Total da NF-e
-      Total.ICMSTot.vTotTrib     := Arredondar(QryCadNotaTOTALIMPOSTOTRANSPARENCIA.AsCurrency,2) ;//Arredondar(QryTotaisNfeTOTALIMPOSTOTRANSPARENCIANORMAL.AsCurrency,2 ); // W16 - Valor Total da NF-e
-
       End;
     End;
 
@@ -3807,9 +3768,9 @@ End;
 procedure TFNFSEletronica.btnCancelamentoClick(Sender: TObject);
 Begin
 
- Cancelamentodiretodenfe1.Click;
+ //Cancelamentodiretodenfe1.Click;
 
- { FNFSCancelamento := TFNFSCancelamento.Create(Self);
+  FNFSCancelamento := TFNFSCancelamento.Create(Self);
 
   Try
     Modulo.codigofilial :='0';
@@ -3817,7 +3778,7 @@ Begin
     FNFSCancelamento.ShowModal;
   Finally
     FreeAndNil(FNFSCancelamento);
-  End; }
+  End;
 End;
 
 procedure TFNFSEletronica.btnImprimirClick(Sender: TObject);
@@ -4072,12 +4033,14 @@ Begin
   CdsLookFiliais.Open;
   if cdsLookFiliais.RecordCount > 1 then
   begin
-  cdsLookFiliais.First;
-  Label4.Visible := True;
-  DBLookupComboBox1.Visible := True;
-  end else begin
-  Label4.Visible := false;
-  DBLookupComboBox1.Visible := false;
+    cdsLookFiliais.First;
+    Label4.Visible := True;
+    DBLookupComboBox1.Visible := True;
+  end
+  else
+  begin
+    Label4.Visible := false;
+    DBLookupComboBox1.Visible := false;
   end ;
 
   QryParametrosNFE.Close;
@@ -4094,38 +4057,34 @@ Begin
     {$ELSE}
     {$ENDIF}
 
-    If IMPRIMENFERAVE1 <> Nil Then Begin
+    If IMPRIMENFERAVE1 <> Nil Then
+    Begin
       IMPRIMENFERAVE1.TipoDANFE := StrToTpImp(OK, IntToStr(rgImpressao.ItemIndex + 1));
       IMPRIMENFERAVE1.Logo      := QryParametrosNFENFE_GERALCAMINHOLOGOMARCA.AsString;
       IMPRIMENFERAVE1.NumCopias := 1;
     End;
-
   Finally
   End;
 End;
 
 procedure TFNFSEletronica.ABREDADOS;
 Var
-Ok:Boolean;
+  Ok : Boolean;
 begin
-
-   NFeW.free;
-
+  NFeW.free;
   QryParametrosNFE.Close;
   QryParametrosNFE.SQL.Clear;
   QryParametrosNFE.SQL.Add('SELECT * FROM NFECONF');
   QryParametrosNFE.SQL.Add('WHERE FIL_CODIGO = :FIL_CODIGO ');
   QryParametrosNFE.ParamByName('FIL_CODIGO').AsInteger := cdslookfiliaisfil_codigo.AsInteger;
   QryParametrosNFE.Open;
-
   NFeW := TNFeW.Create(NFe);
-
   Try
     {$IFDEF ACBrNFeOpenSSL}
     {$ELSE}
     {$ENDIF}
-
-    If IMPRIMENFERAVE1 <> Nil Then Begin
+    If IMPRIMENFERAVE1 <> Nil Then
+    Begin
       IMPRIMENFERAVE1.TipoDANFE := StrToTpImp(OK, IntToStr(rgImpressao.ItemIndex + 1));
       IMPRIMENFERAVE1.Logo      := QryParametrosNFENFE_GERALCAMINHOLOGOMARCA.AsString;
       IMPRIMENFERAVE1.NumCopias := 1;
@@ -4155,17 +4114,20 @@ begin
   FormaContigencia := StrToInt(Copy(QryParametrosNFENFE_GERALFORMADEEMISSAO.AsString, 1, 1));
 
   Case FormaContigencia Of
-  1 : rgFormaEmissao.ItemIndex := 0;
-  2 : rgFormaEmissao.ItemIndex := 1;
-  3 : rgFormaEmissao.ItemIndex := 2;
-  4 : rgFormaEmissao.ItemIndex := 3;
-  5 : rgFormaEmissao.ItemIndex := 4;
+    1 : rgFormaEmissao.ItemIndex := 0;
+    2 : rgFormaEmissao.ItemIndex := 1;
+    3 : rgFormaEmissao.ItemIndex := 2;
+    4 : rgFormaEmissao.ItemIndex := 3;
+    5 : rgFormaEmissao.ItemIndex := 4;
   End;
 
-  If Copy(QryParametrosNFENFE_GERALDANFERETRATO.AsString, 1, 1) = '1' Then Begin
-     rgImpressao.ItemIndex := 0;
-  End Else Begin
-     rgImpressao.ItemIndex := 1;
+  If Copy(QryParametrosNFENFE_GERALDANFERETRATO.AsString, 1, 1) = '1' Then
+  Begin
+    rgImpressao.ItemIndex := 0;
+  End
+  Else
+  Begin
+    rgImpressao.ItemIndex := 1;
   End;
 
   AcbrNFe.Configuracoes.Arquivos.PathNFe         := QryParametrosNFENFE_CAMINHOXML.AsString;
@@ -4195,11 +4157,17 @@ begin
 
   IMPRIMENFERAVE1.RavFile := QryParametrosNFENFE_CAMINHORAVE.AsString;
 
-  If Ambiente = '1' Then Begin
+  If Ambiente = '1' Then
+  Begin
      StBar.Panels[1].Text := 'Ambiente: Produção';
-  End Else If Ambiente = '2' Then Begin
-     StBar.Panels[1].Text := 'Ambiente: Homologação';
-  End ELse Begin
+  End
+  Else
+  If Ambiente = '2' Then
+  Begin
+    StBar.Panels[1].Text := 'Ambiente: Homologação';
+  End
+  else
+  Begin
     Application.MessageBox('Tipo de Ambiente Inválido.', 'A T E N Ç Ã O', MB_OK + MB_ICONERROR);
   End;
 
@@ -4218,7 +4186,6 @@ procedure TFNFSEletronica.AcbrNFeStatusChange(Sender: TObject);
 Begin
   Case AcbrNFe.Status Of
     stIdle :
-
     Begin
       If ( FStatus <> nil ) Then
         FStatus.Hide;
@@ -4329,279 +4296,271 @@ End;
 
 procedure TFNFSEletronica.Cancelamentodiretodenfe1Click(Sender: TObject);
 var
- Chave, Protocolo, Justificativa,Status1 : string;
- Status,_Sequencia,Z:Integer;
-  Ok : Boolean;
-   I, sNotaFiscal, x,y,NumeroLote, CodigoStatus : Integer;
-  NumeroRecibo, sDataHora, sSerie,DataHoraEvento,NumeroProtocolo ,XMLCancelamento,MotivoStatus : String;
-  arquivos_backup:array[0..1] of string;
-  
-  cnpj:string;
-  stats,Modo:string;
+ Chave, Protocolo, Justificativa, Status1, cnpj, stats, Modo : string;
+ Ok : Boolean;
+ Status, _Sequencia, Z, I, sNotaFiscal, x, y, NumeroLote, CodigoStatus : Integer;
+ NumeroRecibo, sDataHora, sSerie, DataHoraEvento, NumeroProtocolo, XMLCancelamento, MotivoStatus : String;
+ arquivos_backup : array[0..1] of string;
 Begin
-    y:=0;
-    if RxNotaFiscal.IsEmpty then begin
+  y:=0;
+  if RxNotaFiscal.IsEmpty then
+  begin
     Application.MessageBox('Não existe NF-e No Grid!' + #13#10 +
       'Realize primeiramente uma pesquisa!', 'ATENÇÃO!', MB_OK + MB_ICONSTOP);
     Abort;
-    end;
-   { RxNotaFiscal.First;
-    for x := 0 to Pred( RxNotaFiscal.RecordCount ) do
-    begin
-    if RxNotaFiscalMARCADO.AsBoolean = True then
-    y  :=  y+1;
-    RxNotaFiscal.Next;
-    end;
-    if y < 1 then
-    begin
-    Application.MessageBox('Não existe NF-e Selecionada No Grid!' + #13#10 +
-      'Clique com o mouse sobre a NF-e, e tente novamente!', 'ATENÇÃO!', MB_OK
-      + MB_ICONSTOP);
-    DBGridConsulta.SetFocus;
-    Abort;
-    end;  }
+  end;
+ { RxNotaFiscal.First;
+  for x := 0 to Pred( RxNotaFiscal.RecordCount ) do
+  begin
+  if RxNotaFiscalMARCADO.AsBoolean = True then
+  y  :=  y+1;
+  RxNotaFiscal.Next;
+  end;
+  if y < 1 then
+  begin
+  Application.MessageBox('Não existe NF-e Selecionada No Grid!' + #13#10 +
+    'Clique com o mouse sobre a NF-e, e tente novamente!', 'ATENÇÃO!', MB_OK
+    + MB_ICONSTOP);
+  DBGridConsulta.SetFocus;
+  Abort;
+  end;  }
 
-    if RxNotaFiscalSTATUS_NFE.AsString = '6' then
-    BEGIN
-    MessageBoxW(Handle, 'Essa NF-e já foi cancelada!' + #13#10 +
+  if RxNotaFiscalSTATUS_NFE.AsString = '6' then
+  begin
+   MessageBoxW(Handle, 'Essa NF-e já foi cancelada!' + #13#10 +
       'Vamos consulta-la novamente!', 'NOTAS EXPLICATIVAS:', MB_OK +
       MB_ICONINFORMATION);
     //ConsultaStatusNFe1.Click;
     Abort;
-    END;
+  end;
 
-    if RxNotaFiscalMARCADO.AsBoolean = False then begin
+  if RxNotaFiscalMARCADO.AsBoolean = False then
+  begin
     MessageBoxW(Handle, 'Escolha uma NF-e' + #13#10 +
     '', 'NOTAS EXPLICATIVAS:', MB_OK +
     MB_ICONINFORMATION);
     Abort;
-
-    end;
-
-
-    HistoricoNFe.Close;
-    HistoricoNFe.SQL.Clear;
-    HistoricoNFe.SQL.Add('SELECT * FROM HISTORICO_NFE');
-    HistoricoNFe.SQL.Add('WHERE FIL_CODIGO   = ' + cdslookfiliaisfil_codigo.AsString);
-    HistoricoNFe.SQL.Add('AND   NOTA_FISCAL  = ' + IntToStr(RxNotaFiscalNOTA_FISCAL.AsInteger));
-    HistoricoNFe.SQL.Add('AND   STATUS       = ' + '100' );
-    CdsHistoricoNFe.close;
-    CdsHistoricoNFe.Open;
-    if not CdsHistoricoNFe.IsEmpty then
-    begin
-
-      {$WARNINGS OFF}
-      Z := Application.MessageBox(PChar('Deseja realmente cancelar a NF-e?       '                    + #13#10 +
-                                    '                                        '                        + #13#10 +
-                                    'Chave.........: ' + (Trim((CdsHistoricoNFeCHAVE.AsString)))        + #13#10 +
-                                    'Nº. Protocolo.: ' + (Trim(CdsHistoricoNFePROTOCOLO.AsString))    + #13#10 +
-                                    'Nota Fiscal...: ' + (Trim(RxNotaFiscalNOTA_FISCAL.AsString))  + #13#10 +
-                                    'Data Emissão..: ' + (Trim(CdsHistoricoNFeDATA_EMISSAO.AsString)) + #13#10 +
-                                    '....................................................................................' + #13#10 +
-                                    'Razão Social..: ' + (Trim(RxNotaFiscalRAZAO_SOCIAL.AsString))                                   + #13#10 +
-                                    'C.N.P.J/C.P.F.: ' + (Trim(RxNotaFiscalCNPJCPF.AsString))), 'A T E N Ç Ã O', MB_YESNO + MB_ICONQUESTION);
-
-  If not (Z = MrYes) Then Begin
-  Abort;
-  End;
-    if not(InputQuery('WebServices Cancelamento', 'Justificativa', Justificativa)) then
-    exit;
-    {
-      ACBrNFe.WebServices.Cancelamento.NFeChave      := Trim(CdsHistoricoNFeCHAVE.AsString);
-      ACBrNFe.WebServices.Cancelamento.Protocolo     := CdsHistoricoNFePROTOCOLO.AsString;
-      ACBrNFe.WebServices.Cancelamento.Protocolo     := CdsHistoricoNFePROTOCOLO.AsString;
-      ACBrNFe.WebServices.Cancelamento.Justificativa := Justificativa;
-      ACBrNFe.WebServices.Cancelamento.Executar;
-      Status := AcbrNFe.WebServices.Cancelamento.cStat;
-      //Status1 := ACBrNFe.WebServices.RetornoWS;
-      }
-
-       // numero do lote de envio (somente um exemplo, pode-se utilizar seu proprio controle)
-  //NumeroLote := CdsHistoricoNFePROTOCOLO.AsString ;//  StrToInt(FormatDateTime('yymmddhhmm', NOW));
- 
-  // carregar o xml da nota fiscal eletronica, pode ser omitido
-  ACBrNFe.NotasFiscais.Clear;
- // if not ACBrNFe.NotasFiscais.LoadFromString(XML) then
-  //  raise Exception.Create('Não foi possível carregar o XML da Nota Fiscal Eletrônica correspondente!');
-
-  // Criar o cancelamento
-  ACBrNFe.EventoNFe.Evento.Clear;
-  ACBrNFe.EventoNFe.idLote := NumeroLote;
-
-  with ACBrNFe.EventoNFe.Evento.Add do
-  begin
-    infEvento.chNFe      := Trim(CdsHistoricoNFeCHAVE.AsString);
-    infEvento.CNPJ       := Trim(RemoveChar(CdsLookFiliaisFIL_CNPJ.AsString));
-    infEvento.dhEvento   := Now;
-    infEvento.tpEvento   := teCancelamento;
-    infEvento.detEvento.nProt := CdsHistoricoNFePROTOCOLO.AsString;
-    infEvento.detEvento.xJust := Justificativa;
   end;
- 
-// Enviar o evento de cancelamento
-  if ACBrNFe.EnviarEventoNFe(NumeroLote) then
+
+  HistoricoNFe.Close;
+  HistoricoNFe.SQL.Clear;
+  HistoricoNFe.SQL.Add('SELECT * FROM HISTORICO_NFE');
+  HistoricoNFe.SQL.Add('WHERE FIL_CODIGO   = ' + cdslookfiliaisfil_codigo.AsString);
+  HistoricoNFe.SQL.Add('AND   NOTA_FISCAL  = ' + IntToStr(RxNotaFiscalNOTA_FISCAL.AsInteger));
+  HistoricoNFe.SQL.Add('AND   STATUS       = ' + '100' );
+  CdsHistoricoNFe.close;
+  CdsHistoricoNFe.Open;
+  if not CdsHistoricoNFe.IsEmpty then
   begin
-    with ACBrNFe.WebServices.EnvEvento do
+    {$WARNINGS OFF}
+    Z := Application.MessageBox(PChar('Deseja realmente cancelar a NF-e?       '                    + #13#10 +
+                                  '                                        '                        + #13#10 +
+                                  'Chave.........: ' + (Trim((CdsHistoricoNFeCHAVE.AsString)))        + #13#10 +
+                                  'Nº. Protocolo.: ' + (Trim(CdsHistoricoNFePROTOCOLO.AsString))    + #13#10 +
+                                  'Nota Fiscal...: ' + (Trim(RxNotaFiscalNOTA_FISCAL.AsString))  + #13#10 +
+                                  'Data Emissão..: ' + (Trim(CdsHistoricoNFeDATA_EMISSAO.AsString)) + #13#10 +
+                                  '....................................................................................' + #13#10 +
+                                  'Razão Social..: ' + (Trim(RxNotaFiscalRAZAO_SOCIAL.AsString))                                   + #13#10 +
+                                  'C.N.P.J/C.P.F.: ' + (Trim(RxNotaFiscalCNPJCPF.AsString))), 'A T E N Ç Ã O', MB_YESNO + MB_ICONQUESTION);
+
+    If not (Z = MrYes) Then
+    Begin
+      Abort;
+    End;
+    if not(InputQuery('WebServices Cancelamento', 'Justificativa', Justificativa)) then
+      exit;
+    {
+    ACBrNFe.WebServices.Cancelamento.NFeChave      := Trim(CdsHistoricoNFeCHAVE.AsString);
+    ACBrNFe.WebServices.Cancelamento.Protocolo     := CdsHistoricoNFePROTOCOLO.AsString;
+    ACBrNFe.WebServices.Cancelamento.Protocolo     := CdsHistoricoNFePROTOCOLO.AsString;
+    ACBrNFe.WebServices.Cancelamento.Justificativa := Justificativa;
+    ACBrNFe.WebServices.Cancelamento.Executar;
+    Status := AcbrNFe.WebServices.Cancelamento.cStat;
+    //Status1 := ACBrNFe.WebServices.RetornoWS;
+    }
+
+    // numero do lote de envio (somente um exemplo, pode-se utilizar seu proprio controle)
+    //NumeroLote := CdsHistoricoNFePROTOCOLO.AsString ;//  StrToInt(FormatDateTime('yymmddhhmm', NOW));
+
+    // carregar o xml da nota fiscal eletronica, pode ser omitido
+    ACBrNFe.NotasFiscais.Clear;
+    // if not ACBrNFe.NotasFiscais.LoadFromString(XML) then
+    //  raise Exception.Create('Não foi possível carregar o XML da Nota Fiscal Eletrônica correspondente!');
+
+    // Criar o cancelamento
+    ACBrNFe.EventoNFe.Evento.Clear;
+    ACBrNFe.EventoNFe.idLote := NumeroLote;
+
+    with ACBrNFe.EventoNFe.Evento.Add do
     begin
-      if EventoRetorno.retEvento.Items[0].RetInfEvento.cStat <> 135 then
-      begin
-        raise Exception.CreateFmt(
-          'Ocorreu o seguinte erro ao cancelar a nota fiscal eletrônica:'  + sLineBreak +
-          'Código:%d' + sLineBreak +
-          'Motivo: %s', [
-            EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
-            EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo
-        ]);
-      end;
- 
-  // retornos 
-      DataHoraEvento  := DateToStr(EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
-      NumeroProtocolo := EventoRetorno.retEvento.Items[0].RetInfEvento.nProt;
-      XMLCancelamento := EventoRetorno.retEvento.Items[0].RetInfEvento.XML;
-      CodigoStatus    := EventoRetorno.retEvento.Items[0].RetInfEvento.cStat;
-      MotivoStatus    := EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo;
+      infEvento.chNFe      := Trim(CdsHistoricoNFeCHAVE.AsString);
+      infEvento.CNPJ       := Trim(RemoveChar(CdsLookFiliaisFIL_CNPJ.AsString));
+      infEvento.dhEvento   := Now;
+      infEvento.tpEvento   := teCancelamento;
+      infEvento.detEvento.nProt := CdsHistoricoNFePROTOCOLO.AsString;
+      infEvento.detEvento.xJust := Justificativa;
     end;
+
+    // Enviar o evento de cancelamento
+    if ACBrNFe.EnviarEventoNFe(NumeroLote) then
+    begin
+      with ACBrNFe.WebServices.EnvEvento do
+      begin
+        if EventoRetorno.retEvento.Items[0].RetInfEvento.cStat <> 135 then
+        begin
+          raise Exception.CreateFmt(
+            'Ocorreu o seguinte erro ao cancelar a nota fiscal eletrônica:'  + sLineBreak +
+            'Código:%d' + sLineBreak +
+            'Motivo: %s', [
+              EventoRetorno.retEvento.Items[0].RetInfEvento.cStat,
+              EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo
+          ]);
+        end;
+
+    // retornos
+        DataHoraEvento  := DateToStr(EventoRetorno.retEvento.Items[0].RetInfEvento.dhRegEvento);
+        NumeroProtocolo := EventoRetorno.retEvento.Items[0].RetInfEvento.nProt;
+        XMLCancelamento := EventoRetorno.retEvento.Items[0].RetInfEvento.XML;
+        CodigoStatus    := EventoRetorno.retEvento.Items[0].RetInfEvento.cStat;
+        MotivoStatus    := EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo;
+      end;
+    end
+    else
+    begin
+      with ACBrNFe.WebServices.EnvEvento do
+      begin
+        raise Exception.Create(
+          'Ocorreram erros ao tentar efetuar o cancelamento:' + sLineBreak +
+          'Lote: '     + IntToStr(EventoRetorno.idLote) + sLineBreak +
+          'Ambiente: ' + TpAmbToStr(EventoRetorno.tpAmb) + sLineBreak +
+          'Orgao: '    + IntToStr(EventoRetorno.cOrgao) + sLineBreak +
+          sLineBreak +
+          'Status: '   + IntToStr(EventoRetorno.cStat) + sLineBreak +
+          'Motivo: '   + EventoRetorno.xMotivo
+        );
+      end;
+    end;
+
+    if CodigoStatus = 135  then
+    begin
+     //If CdsHistoricoNFe.RecordCount = 0 Then Begin
+      HistoricoNFe.Close;
+      HistoricoNFe.SQL.Clear;
+      HistoricoNFe.SQL.Add('INSERT INTO HISTORICO_NFE ');
+      HistoricoNFe.SQL.Add('      (STATUS,            ');
+      HistoricoNFe.SQL.Add('       SEQUENCIA,         ');
+      HistoricoNFe.SQL.Add('       COD_EMPRESA,       ');
+      HistoricoNFe.SQL.Add('       NOTA_FISCAL,       ');
+      HistoricoNFe.SQL.Add('       SERIE,             ');
+      HistoricoNFe.SQL.Add('       DATA_EMISSAO,      ');
+      HistoricoNFe.SQL.Add('       CHAVE,             ');
+      HistoricoNFe.SQL.Add('       AMBIENTE,          ');
+      HistoricoNFe.SQL.Add('       MODELO,            ');
+      HistoricoNFe.SQL.Add('       PROTOCOLO,         ');
+      HistoricoNFe.SQL.Add('       COD_CLIENTE,       ');
+      HistoricoNFe.SQL.Add('       CAMINHO,           ');
+      HistoricoNFe.SQL.Add('       RECIBO,            ');
+      HistoricoNFe.SQL.Add('       FIL_CODIGO,        ');
+      HistoricoNFe.SQL.Add('       FIL_CNPJ)          ');
+      HistoricoNFe.SQL.Add('VALUES (:STATUS,          ');
+      HistoricoNFe.SQL.Add('        :SEQUENCIA,       ');
+      HistoricoNFe.SQL.Add('        :COD_EMPRESA,     ');
+      HistoricoNFe.SQL.Add('        :NOTA_FISCAL,     ');
+      HistoricoNFe.SQL.Add('        :SERIE,           ');
+      HistoricoNFe.SQL.Add('        :DATA_EMISSAO,    ');
+      HistoricoNFe.SQL.Add('        :CHAVE,           ');
+      HistoricoNFe.SQL.Add('        :AMBIENTE,        ');
+      HistoricoNFe.SQL.Add('        :MODELO,          ');
+      HistoricoNFe.SQL.Add('        :PROTOCOLO,       ');
+      HistoricoNFe.SQL.Add('        :COD_CLIENTE,     ');
+      HistoricoNFe.SQL.Add('        :CAMINHO,         ');
+      HistoricoNFe.SQL.Add('        :RECIBO,          ');
+      HistoricoNFe.SQL.Add('        :FIL_CODIGO,     ');
+      HistoricoNFe.SQL.Add('        :FIL_CNPJ)       ');
+
+      QryMaximo.Close;
+      QryMaximo.SQL.Clear;
+      QryMaximo.SQL.Add('SELECT MAX(SEQUENCIA) + 1 AS TOTAL ');
+      QryMaximo.SQL.Add('FROM HISTORICO_NFE                 ');
+
+      CdsQryMaximo.close;
+      CdsQryMaximo.Open;
+
+      If CdsQryMaximo.RecordCount > 0 Then
+      Begin
+        _Sequencia := CdsQryMaximoTOTAL.AsInteger + 1;
+      End
+      Else
+      Begin
+        _Sequencia := CdsQryMaximoTOTAL.AsInteger;
+      End;
+
+      HistoricoNFe.ParamByName('STATUS').Value         := Status;
+      HistoricoNFe.ParamByName('SEQUENCIA').AsInteger  :=_Sequencia;
+      HistoricoNFe.ParamByName('COD_EMPRESA').Value    := CdsLookFiliaisEMP_CODIGO.AsInteger;
+      HistoricoNFe.ParamByName('NOTA_FISCAL').Value    := RxNotaFiscalNOTA_FISCAL.AsInteger;
+      HistoricoNFe.ParamByName('SERIE').Value          := RxNotaFiscalSERIE.AsInteger;
+      HistoricoNFe.ParamByName('DATA_EMISSAO').AsDate  := Date;
+      HistoricoNFe.ParamByName('CHAVE').Value          := AcbrNFe.WebServices.Retorno.ChaveNFe;
+      HistoricoNFe.ParamByName('AMBIENTE').Value       := Copy(QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString, 1, 1);
+      HistoricoNFe.ParamByName('MODELO').Value         := '55';
+      HistoricoNFe.ParamByName('PROTOCOLO').Value      := NumeroProtocolo;
+      HistoricoNFe.ParamByName('COD_CLIENTE').Value    := 0;
+      HistoricoNFe.ParamByName('CAMINHO').Value        := RxNotaFiscalCAMINHO_XML.AsString;//QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
+      HistoricoNFe.ParamByName('FIL_CODIGO').Value     := CdsLookFiliaisFIL_CODIGO.AsInteger;
+      HistoricoNFe.ParamByName('RECIBO').Value         := AcbrNFe.WebServices.Retorno.Recibo;
+      HistoricoNFe.ParamByName('FIL_CNPJ').Value       := CdsLookFiliaisFIL_CNPJ.AsString;
+      HistoricoNFe.ExecSQL;
+      Application.MessageBox(PChar('Cancelamento homologado: ' + #13#10 +
+                                         '                               ' + #13#10 +
+                                         'Status.: ' + IntToStr(Status) + #13#10 +
+                                         'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Cancelamento.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
+      AtualizaStatusNotaFiscal(RxNotaFiscalNOTA_FISCAL.AsInteger, '6');
+      try
+        arquivos_backup[0] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Consulta.NFeChave + '-nfe.xml';
+        arquivos_backup[1] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Consulta.NFeChave + '-nfe.xml';
+        stats :=  IntToStr(Status);
+        cnpj := CdsLookFiliaisFIL_CNPJ.AsString;
+        Modo := QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString;
+        EnviaBackupFtp(cnpj,stats,arquivos_backup,Modo);
+      except
+      end;
+
+    End
+    else
+    begin
+      Application.MessageBox(PChar('Não é Permitido Cancelar NF-e: ' + #13#10 +
+                                         '                               ' + #13#10 +
+                                         'Status.: ' + IntToStr(Status) + #13#10 +
+                                         'Motivo.: ' + AcbrNFe.WebServices.Retorno.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
+      Mensagens(Status);
+    end;
+    Mensagens(Status);
   end
   else
   begin
-    with ACBrNFe.WebServices.EnvEvento do
-    begin
-      raise Exception.Create(
-        'Ocorreram erros ao tentar efetuar o cancelamento:' + sLineBreak +
-        'Lote: '     + IntToStr(EventoRetorno.idLote) + sLineBreak +
-        'Ambiente: ' + TpAmbToStr(EventoRetorno.tpAmb) + sLineBreak +
-        'Orgao: '    + IntToStr(EventoRetorno.cOrgao) + sLineBreak +
-        sLineBreak +
-        'Status: '   + IntToStr(EventoRetorno.cStat) + sLineBreak +
-        'Motivo: '   + EventoRetorno.xMotivo
-      );
-    end;
   end;
-  
-      if CodigoStatus = 135  then
-      begin
-
-       //If CdsHistoricoNFe.RecordCount = 0 Then Begin
-        HistoricoNFe.Close;
-        HistoricoNFe.SQL.Clear;
-        HistoricoNFe.SQL.Add('INSERT INTO HISTORICO_NFE ');
-        HistoricoNFe.SQL.Add('      (STATUS,            ');
-        HistoricoNFe.SQL.Add('       SEQUENCIA,         ');
-        HistoricoNFe.SQL.Add('       COD_EMPRESA,       ');
-        HistoricoNFe.SQL.Add('       NOTA_FISCAL,       ');
-        HistoricoNFe.SQL.Add('       SERIE,             ');
-        HistoricoNFe.SQL.Add('       DATA_EMISSAO,      ');
-        HistoricoNFe.SQL.Add('       CHAVE,             ');
-        HistoricoNFe.SQL.Add('       AMBIENTE,          ');
-        HistoricoNFe.SQL.Add('       MODELO,            ');
-        HistoricoNFe.SQL.Add('       PROTOCOLO,         ');
-        HistoricoNFe.SQL.Add('       COD_CLIENTE,       ');
-        HistoricoNFe.SQL.Add('       CAMINHO,           ');
-        HistoricoNFe.SQL.Add('       RECIBO,            ');
-        HistoricoNFe.SQL.Add('       FIL_CODIGO,        ');
-        HistoricoNFe.SQL.Add('       FIL_CNPJ)          ');
-
-        HistoricoNFe.SQL.Add('VALUES (:STATUS,          ');
-        HistoricoNFe.SQL.Add('        :SEQUENCIA,       ');
-        HistoricoNFe.SQL.Add('        :COD_EMPRESA,     ');
-        HistoricoNFe.SQL.Add('        :NOTA_FISCAL,     ');
-        HistoricoNFe.SQL.Add('        :SERIE,           ');
-        HistoricoNFe.SQL.Add('        :DATA_EMISSAO,    ');
-        HistoricoNFe.SQL.Add('        :CHAVE,           ');
-        HistoricoNFe.SQL.Add('        :AMBIENTE,        ');
-        HistoricoNFe.SQL.Add('        :MODELO,          ');
-        HistoricoNFe.SQL.Add('        :PROTOCOLO,       ');
-        HistoricoNFe.SQL.Add('        :COD_CLIENTE,     ');
-        HistoricoNFe.SQL.Add('        :CAMINHO,         ');
-        HistoricoNFe.SQL.Add('        :RECIBO,          ');
-        HistoricoNFe.SQL.Add('        :FIL_CODIGO,     ');
-        HistoricoNFe.SQL.Add('        :FIL_CNPJ)       ');
-
-        QryMaximo.Close;
-        QryMaximo.SQL.Clear;
-        QryMaximo.SQL.Add('SELECT MAX(SEQUENCIA) + 1 AS TOTAL ');
-        QryMaximo.SQL.Add('FROM HISTORICO_NFE                 ');
-
-        CdsQryMaximo.close;
-        CdsQryMaximo.Open;
-
-        If CdsQryMaximo.RecordCount > 0 Then Begin
-          _Sequencia := CdsQryMaximoTOTAL.AsInteger + 1;
-        End Else Begin
-          _Sequencia := CdsQryMaximoTOTAL.AsInteger;
-        End;
-
-        HistoricoNFe.ParamByName('STATUS').Value         := Status;
-        HistoricoNFe.ParamByName('SEQUENCIA').AsInteger  :=_Sequencia;
-        HistoricoNFe.ParamByName('COD_EMPRESA').Value    := CdsLookFiliaisEMP_CODIGO.AsInteger;
-        HistoricoNFe.ParamByName('NOTA_FISCAL').Value    := RxNotaFiscalNOTA_FISCAL.AsInteger;
-        HistoricoNFe.ParamByName('SERIE').Value          := RxNotaFiscalSERIE.AsInteger;
-        HistoricoNFe.ParamByName('DATA_EMISSAO').AsDate  := Date;
-        HistoricoNFe.ParamByName('CHAVE').Value          := AcbrNFe.WebServices.Retorno.ChaveNFe;
-        HistoricoNFe.ParamByName('AMBIENTE').Value       := Copy(QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString, 1, 1);
-        HistoricoNFe.ParamByName('MODELO').Value         := '55';
-        HistoricoNFe.ParamByName('PROTOCOLO').Value      := NumeroProtocolo;
-        HistoricoNFe.ParamByName('COD_CLIENTE').Value    := 0;
-        HistoricoNFe.ParamByName('CAMINHO').Value        := RxNotaFiscalCAMINHO_XML.AsString;//QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Retorno.ChaveNFe + '-nfe.xml';
-        HistoricoNFe.ParamByName('FIL_CODIGO').Value     := CdsLookFiliaisFIL_CODIGO.AsInteger;
-        HistoricoNFe.ParamByName('RECIBO').Value         := AcbrNFe.WebServices.Retorno.Recibo;
-        HistoricoNFe.ParamByName('FIL_CNPJ').Value       := CdsLookFiliaisFIL_CNPJ.AsString;
-        HistoricoNFe.ExecSQL;
-        Application.MessageBox(PChar('Cancelamento homologado: ' + #13#10 +
-                                           '                               ' + #13#10 +
-                                           'Status.: ' + IntToStr(Status) + #13#10 +
-                                           'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Cancelamento.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
-        AtualizaStatusNotaFiscal(RxNotaFiscalNOTA_FISCAL.AsInteger, '6');
-
-
-          try
-          arquivos_backup[0] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Consulta.NFeChave + '-nfe.xml';
-          arquivos_backup[1] :=   QryParametrosNFENFE_CAMINHOXML.AsString + AcbrNFe.WebServices.Consulta.NFeChave + '-nfe.xml';
-          stats :=  IntToStr(Status);
-          cnpj := CdsLookFiliaisFIL_CNPJ.AsString;
-          Modo := QryParametrosNFENFE_WEBSERVICEAMBIENTE.AsString;
-          EnviaBackupFtp(cnpj,stats,arquivos_backup,Modo);
-          except
-          end;
-
-       End else begin
-
-        Application.MessageBox(PChar('Não é Permitido Cancelar NF-e: ' + #13#10 +
-                                           '                               ' + #13#10 +
-                                           'Status.: ' + IntToStr(Status) + #13#10 +
-                                           'Motivo.: ' + AcbrNFe.WebServices.Retorno.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
-       Mensagens(Status);
-       end;
-        Mensagens(Status);
-end else begin
-
-
-
-end;
-
 end;
 
 procedure TFNFSEletronica.CbTipoConsultaChange(Sender: TObject);
 begin
   Case CbTipoConsulta.ItemIndex Of
-  0 : Begin
-        lblTipo.Font.Color   := clBlack;
-        lblTipo.Caption      := 'Data Emissão';
-
-        lblDtFinal.Visible   := True;
-
-        EDataInicial.Visible := True;
-        EDataFinal.Visible   := True;
-        EDataInicial.Date    := Date;
-        EDataFinal.Date      := Date;
-        EDataInicial.SetFocus;
-      End;
+    0 : Begin
+          lblTipo.Font.Color   := clBlack;
+          lblTipo.Caption      := 'Data Emissão';
+          lblDtFinal.Visible   := True;
+          EDataInicial.Visible := True;
+          EDataFinal.Visible   := True;
+          EDataInicial.Date    := Date;
+          EDataFinal.Date      := Date;
+          EDataInicial.SetFocus;
+        End;
   End;
 End;
 
 procedure TFNFSEletronica.CdsLookFiliaisAfterScroll(DataSet: TDataSet);
 begin
-//ABREDADOS;
+  //ABREDADOS;
 end;
 
 procedure TFNFSEletronica.RxNotaFiscal1CalcFields(DataSet: TDataSet);
@@ -4641,45 +4600,7 @@ begin
         DBGridConsulta.Canvas.Brush.Color := $00FFEFDF; // define uma cor de fundo
         DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
         DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-
-
       end;
-
-       if RxNotaFiscalSTATUS_NFE.AsString = '6' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clRed; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
- if RxNotaFiscalSTATUS_NFE.AsString = '5' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clBlue; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
-  if RxNotaFiscalSTATUS_NFE.AsString = '9' then
- begin
-    if not ( gdSelected in State ) then // se a célula não está selecionada
-      begin
-      DBGridConsulta.Font.Color := clWindow;
-        DBGridConsulta.Canvas.Brush.Color := clGreen; // define uma cor de fundo
-        DBGridConsulta.Canvas.FillRect( Rect ); // pinta a célula
-        DBGridConsulta.DefaultDrawDataCell( rect, Column.Field, State ); // pinta o texto padrão
-      end;
- end;
-
-
-
   (*destaca campo NOME*)
  { if Column.Field = RxNotaFiscalCLI_RAZAO then
     begin
@@ -4714,7 +4635,8 @@ end;
 
 procedure TFNFSEletronica.EnviarviaModem1Click(Sender: TObject);
 Var
-  Host, Porta,para : String;
+  Host, Porta : String;
+
   CC: Tstrings;
 Begin
   QryParametrosNFE.Close;
@@ -4733,24 +4655,11 @@ Begin
   //QryCliEmail.ParamByName('FIL_CODIGO').AsInteger := cdslookfiliaisfil_codigo.AsInteger;
   QryCliEmail.Open;
   EEMail.Text := '';
-  if QryCliEmailCLI_EMAIL.AsString <> '' then  begin
-  EEMail.Text := LowerCase(QryCliEmailCLI_EMAIL.AsString);
-  end else begin
+  if QryCliEmailCLI_EMAIL.AsString <> '' then
+  EEMail.Text := QryCliEmailCLI_EMAIL.AsString;
 
-    if not(InputQuery('Enviar Email', 'Digite o Email valido do cliente', para)) then
-    exit;
-    EEMail.Text := LowerCase(para);
 
-    QryVazia.Close;
-    QryVazia.SQL.Clear;
-    QryVazia.SQL.Add('UPDATE CLIENTES SET CLIENTES.CLI_EMAIL = :STATUS       ');
-    QryVazia.SQL.Add('WHERE CLI_CODIGO = '+ RxNotaFiscalCOD_CLIENTE.AsString);
-    QryVazia.ParamByName('STATUS').Value :=para;
-    QryVazia.ExecSQL;
 
-    EMailUSUARIO  := para;     
-
-  end;
 
 
   EMailSMTP     := LowerCase(QryParametrosNFENFE_EMAILSMTP.AsString);
@@ -4759,32 +4668,13 @@ Begin
   EMailASSUNTO  := QryParametrosNFENFE_EMAILASSUNTO.AsString;
   EMailMENSAGEM := QryParametrosNFENFE_EMAILMENSAGEM.AsString;
 
-  {If QryParametrosNFENFE_EMAILPORTA.AsString = '' Then Begin
+  If QryParametrosNFENFE_EMAILPORTA.AsString = '' Then Begin
      Application.MessageBox('Porta do EMail Invalida.', 'A T E N Ç Ã O', MB_OK + MB_ICONERROR);
      btnConsultar.SetFocus;
      Abort;
   End Else Begin
      EMailPorta := StrToInt(QryParametrosNFENFE_EMAILPORTA.AsString);
-  End;    }
-
-    If QryParametrosNFENFE_EMAILUSUARIO.AsString = '' Then Begin
-    if not(InputQuery('Email invalido', 'Digite o Email da Sua empresa que sera usado para NFe', para)) then
-    exit;
-
-
-    QryVazia.Close;
-    QryVazia.SQL.Clear;
-    QryVazia.SQL.Add('update NFECONF SET NFECONF.NFE_EMAILUSUARIO = :STATUS       ');
-    QryVazia.SQL.Add('WHERE FIL_CODIGO = '+ cdslookfiliaisfil_codigo.AsString ) ;
-    QryVazia.ParamByName('STATUS').Value :=para;
-
-    QryVazia.ExecSQL;
-
-    EMailUSUARIO  := para;
-
-
-    End;
-
+  End;
 
   EMailSeguro   := StrToInt(QryParametrosNFENFE_EMAILSMTPSEGURO.AsString);
 
@@ -4798,7 +4688,7 @@ Begin
   If (StrToInt(EStatus.Text) = 5) Then Begin
 
     If EEMail.Text <> '' Then Begin
-      // ver essa questão porque não eta emitindo sem o caminho toda vez que imprime
+
       If Not FileExists(CamimhoNFe) Then Begin
         Application.MessageBox('Arquivo Inexistente.', 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
         btnConsultar.SetFocus;
@@ -4808,71 +4698,29 @@ Begin
       mmEmailMsg.Clear;
 
       If CamimhoNFe <> '' Then Begin
-        mmEmailMsg.Lines.Add('');
 
-
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'NFe Emitida por: '+ CdsLookFiliaisFIL_NOME.AsString + '<br><br>'  ) ;
-
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'Segue anexo o Danfe referente a Nota Fiscal Eletrônica N. '+ RxNotaFiscalNOTA_FISCAL.AsString +' e o arquivo XML correspondente.' + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'DATA       : '+ DateToStr(Date) + ' Hora: ' + TimeToStr(Time) + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'CHAVE      : '+ RxNotaFiscalCHAVE.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'NOME/RAZÃO : '+ RxNotaFiscalRAZAO_SOCIAL.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'CNPJ/CPF   : '+  RxNotaFiscalCNPJCPF.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'SÉRIE      : '+ RxNotaFiscalSERIE.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'VALOR TOTAL NFe : '+ RxNotaFiscalVALOR_NOTA.AsString + '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'EMAIL      : '+ EEMail.Text + '<br><br><br><br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'SISTEMA EMISSOR DE NFe, DotCompany Ti, www.dotcompany.com.br (62)3588-6040'+ '<br>'  ) ;
-        mmEmailMsg.Lines.Add(EMailMENSAGEM + 'DotCompany - Sua empresa em suas mãos!'+ '<br>'  ) ;
+        mmEmailMsg.Lines.Add(EMailMENSAGEM + ' Data: ' + DateToStr(Date) + ' Hora: ' + TimeToStr(Time));
 
         AcbrNFe.NotasFiscais.Clear;
         AcbrNFe.NotasFiscais.LoadFromFile(CamimhoNFe);
 
         CC := TstringList.Create;
-        CC.Add(EEMail.Text);
-        CC.Add('nfe@dotcompany.com.br');
+        CC.Add('email_1@provedor.com');
+        CC.Add('email_2@provedor.com.br');
 
-
-        Host  := 'dragaoserv.doterp.com.br';
+        Host  := EMailSMTP;
         Porta := IntToStr(EMailPorta);
 
-                                     { //sSmtpPort,
-                                      //sSmtpUser,
-                                      //sSmtpPasswd,
-                                      //sFrom,
-                                      //sTo,
-                                      //sAssunto: String;
-                                      //sMensagem : TStrings;
-                                      //SSL : Boolean;
-                                      //EnviaPDF: Boolean = true;  ok
-                                      //sCC: TStrings=nil;
-                                      //Anexos:TStrings=nil;
-                                      //PedeConfirma: Boolean = False;
-                                      //AguardarEnvio: Boolean = False;
-                                      //NomeRemetente: String = '';
-                                      //TLS : Boolean = True;
-                                      //UsarThread: Boolean = True;
-                                      //HTML:Boolean = False);  }
-
-
-AcbrNFe.NotasFiscais.Items[0].EnviarEmail(Host
-                                                , '465'
-                                                , 'nfe@dotcompanyti.com.br'
-                                                , 'reboot1980'
+        AcbrNFe.NotasFiscais.Items[0].EnviarEmail(Host
+                                                , Porta
+                                                , EMailUSUARIO
+                                                , EMailSENHA
                                                 , EMailUSUARIO
                                                 , EEMail.Text
-                                                , '(Sistema emissor de NFe DotCompany) Segue anexo PDF/XML Ped. Numero: ' + RxNotaFiscalNOTA_FISCAL.AsString
+                                                , 'Envio do Arquivo(.xml/.PDF)'
                                                 , mmEmailMsg.Lines
-                                                , True
-                                                , True
-                                                , CC
-                                                , nil
-                                                , False
-                                                , False
-                                                , 'DotCompany'
-                                                , True
-                                                , True
-                                                , True   
-                                                );
+                                                , cbEmailSSL.Checked
+                                                , True);
         CC.Free;
 
       End
