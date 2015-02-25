@@ -1,8 +1,6 @@
 object Modulo: TModulo
   OldCreateOrder = False
   OnCreate = DataModuleCreate
-  Left = 345
-  Top = 228
   Height = 491
   Width = 605
   object SQLConexao: TSQLConnection
@@ -13,7 +11,7 @@ object Modulo: TModulo
     LoginPrompt = False
     Params.Strings = (
       'DriverName=DevartInterBase'
-      'DataBase=c:\dotcompany\db\banco.fdb'
+      'DataBase=C:\DotCompany\DB\oficina1.FDB'
       'RoleName='
       'User_Name=sysdba'
       'Password=masterkey'
@@ -34,6 +32,7 @@ object Modulo: TModulo
       'DeferredArrayRead=False')
     VendorLib = 'gds32.DLL'
     BeforeConnect = SQLConexaoBeforeConnect
+    Connected = True
     Left = 32
     Top = 16
   end

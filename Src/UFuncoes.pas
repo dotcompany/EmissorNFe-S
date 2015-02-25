@@ -4,7 +4,7 @@ Interface
 
 Uses
    Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-   StdCtrls, ExtCtrls, Buttons, Mask, DBCtrls, Db, Printers;
+   StdCtrls, ExtCtrls, Buttons, Mask, DBCtrls, Db, Printers, UConst, Math;
 
 Function  Is4DigitYear: Boolean;                                                //Verifica se o ano tem 4 dígitos ou não
 Function  EnDecryptString(StrValue: String; Chave: Word): String;               //Criptografa Chaves
@@ -50,9 +50,16 @@ Procedure EntreDatas(DataFinal, DataInicial: TDate; Var Anos, Meses, Dias: Integ
 Function  TrataRetLogger(VLRet: Integer): String;
 Procedure SetDefaultPrinter(PrinterName: String);
 function splitstr(valor, caracter: string; index: integer): string;
+function RetornaMensagemStatus(AStatus: Integer): string;
+procedure MensagemAtencao(AMensagem: string);
+function RoundTo5(Valor: Double; Casas: Integer): Double;
+
 
 Var
    DigitoPTudo: Integer;
+
+const
+   SKIP = #13#10;
 
 Implementation
 
@@ -1099,6 +1106,254 @@ if Length ( str ) > tam then
 str := Copy ( str, 1, tam );
 Result := str;
 end;
+
+function RetornaMensagemStatus(AStatus: Integer): string;
+var
+   Msg : String;
+Begin
+   Case AStatus Of
+      100  : Msg := C100;
+      101  : Msg := C101;
+      102  : Msg := C102;
+      103  : Msg := C103;
+      104  : Msg := C104;
+      105  : Msg := C105;
+      106  : Msg := C106;
+      107  : Msg := C107;
+      108  : Msg := C108;
+      109  : Msg := C109;
+      110  : Msg := C110;
+      111  : Msg := C111;
+      112  : Msg := C112;
+      201  : Msg := C201;
+      202  : Msg := C202;
+      203  : Msg := C203;
+      204  : Msg := C204;
+      205  : Msg := C205;
+      206  : Msg := C206;
+      207  : Msg := C207;
+      208  : Msg := C208;
+      209  : Msg := C209;
+      210  : Msg := C210;
+      211  : Msg := C211;
+      212  : Msg := C212;
+      213  : Msg := C213;
+      214  : Msg := C214;
+      215  : Msg := C215;
+      216  : Msg := C216;
+      217  : Msg := C217;
+      218  : Msg := C218;
+      219  : Msg := C219;
+      220  : Msg := C220;
+      221  : Msg := C221;
+      222  : Msg := C222;
+      223  : Msg := C223;
+      224  : Msg := C224;
+      225  : Msg := C225;
+      226  : Msg := C226;
+      227  : Msg := C227;
+      228  : Msg := C228;
+      229  : Msg := C229;
+      230  : Msg := C230;
+      231  : Msg := C231;
+      232  : Msg := C232;
+      233  : Msg := C233;
+      234  : Msg := C234;
+      235  : Msg := C235;
+      236  : Msg := C236;
+      237  : Msg := C237;
+      238  : Msg := C238;
+      239  : Msg := C239;
+      240  : Msg := C240;
+      241  : Msg := C241;
+      242  : Msg := C242;
+      243  : Msg := C243;
+      244  : Msg := C244;
+      245  : Msg := C245;
+      246  : Msg := C246;
+      247  : Msg := C247;
+      248  : Msg := C248;
+      249  : Msg := C249;
+      250  : Msg := C250;
+      251  : Msg := C251;
+      252  : Msg := C252;
+      253  : Msg := C253;
+      254  : Msg := C254;
+      255  : Msg := C255;
+      256  : Msg := C256;
+      257  : Msg := C257;
+      258  : Msg := C258;
+      259  : Msg := C259;
+      260  : Msg := C260;
+      261  : Msg := C261;
+      262  : Msg := C262;
+      263  : Msg := C263;
+      264  : Msg := C264;
+      265  : Msg := C265;
+      266  : Msg := C266;
+      267  : Msg := C267;
+      268  : Msg := C268;
+      269  : Msg := C269;
+      270  : Msg := C270;
+      271  : Msg := C271;
+      272  : Msg := C272;
+      273  : Msg := C273;
+      274  : Msg := C274;
+      275  : Msg := C275;
+      276  : Msg := C276;
+      277  : Msg := C277;
+      278  : Msg := C278;
+      279  : Msg := C279;
+      280  : Msg := C280;
+      281  : Msg := C281;
+      282  : Msg := C282;
+      283  : Msg := C283;
+      284  : Msg := C284;
+      285  : Msg := C285;
+      286  : Msg := C286;
+      287  : Msg := C287;
+      288  : Msg := C288;
+      289  : Msg := C289;
+      290  : Msg := C290;
+      291  : Msg := C291;
+      292  : Msg := C292;
+      293  : Msg := C293;
+      294  : Msg := C294;
+      295  : Msg := C295;
+      296  : Msg := C296;
+      297  : Msg := C297;
+      298  : Msg := C298;
+      299  : Msg := C299;
+      301  : Msg := C301;
+      302  : Msg := C302;
+      401  : Msg := C401;
+      402  : Msg := C402;
+      403  : Msg := C403;
+      404  : Msg := C404;
+      405  : Msg := C405;
+      406  : Msg := C406;
+      407  : Msg := C407;
+      409  : Msg := C409;
+      410  : Msg := C410;
+      411  : Msg := C411;
+      412  : Msg := C412;
+
+      453  : Msg := C453;
+      454  : Msg := C454;
+
+      478  : Msg := C478;
+      479  : Msg := C479;
+      480  : Msg := C480;
+      481  : Msg := C481;
+      482  : Msg := C482;
+      483  : Msg := C483;
+      484  : Msg := C484;
+      485  : Msg := C485;
+      486  : Msg := C486;
+      487  : Msg := C487;
+      488  : Msg := C488;
+
+      502  : Msg := C502;
+      503  : Msg := C503;
+      504  : Msg := C504;
+      505  : Msg := C505;
+      506  : Msg := C506;
+      507  : Msg := C507;
+      508  : Msg := C508;
+      509  : Msg := C509;
+      510  : Msg := C510;
+      511  : Msg := C511;
+      512  : Msg := C512;
+      513  : Msg := C513;
+      514  : Msg := C514;
+      515  : Msg := C515;
+      516  : Msg := C516;
+      517  : Msg := C517;
+      518  : Msg := C518;
+      519  : Msg := C519;
+      520  : Msg := C520;
+      521  : Msg := C521;
+      522  : Msg := C522;
+      523  : Msg := C523;
+      524  : Msg := C524;
+      525  : Msg := C525;
+      526  : Msg := C526;
+      527  : Msg := C527;
+      528  : Msg := C528;
+      529  : Msg := C529;
+      530  : Msg := C530;
+      531  : Msg := C531;
+      532  : Msg := C532;
+      533  : Msg := C533;
+      534  : Msg := C534;
+      535  : Msg := C535;
+      536  : Msg := C536;
+      537  : Msg := C537;
+      538  : Msg := C538;
+      539  : Msg := C539;
+      540  : Msg := C540;
+      541  : Msg := C541;
+      542  : Msg := C542;
+      543  : Msg := C543;
+      544  : Msg := C544;
+      545  : Msg := C545;
+      546  : Msg := C546;
+      547  : Msg := C547;
+      548  : Msg := C548;
+      549  : Msg := C549;
+      550  : Msg := C550;
+      551  : Msg := C551;
+      552  : Msg := C552;
+      553  : Msg := C553;
+      554  : Msg := C554;
+      555  : Msg := C555;
+      556  : Msg := C556;
+      557  : Msg := C557;
+      558  : Msg := C558;
+      559  : Msg := C559;
+      560  : Msg := C560;
+      561  : Msg := C561;
+      562  : Msg := C562;
+
+      999  : Msg := C999;
+      9000 : Msg := C9000;
+      9999 : Msg := C9999;
+   End;
+
+   Result := (Msg);;
+end;
+
+procedure MensagemAtencao(AMensagem: string);
+begin
+   Application.MessageBox(PChar(AMensagem), 'A T E N Ç Ã O', MB_OK + MB_ICONERROR);
+end;
+
+function RoundTo5(Valor: Double; Casas: Integer): Double;
+var
+ xValor, xDecimais: String;
+ p, nCasas: Integer;
+ nValor: Double;
+begin
+ nValor := Valor;
+ xValor := Trim(FloatToStr(Valor));
+ p      := pos(',', xValor);
+ if Casas < 0
+  then nCasas := - Casas
+  else nCasas := Casas;
+ if p > 0
+  then begin
+   xDecimais := Copy(xValor, p + 1, length(xValor));
+   if length(xDecimais) > nCasas
+    then begin
+     if xDecimais[nCasas + 1] >= '5'
+      then SetRoundMode(rmUP)
+      else SetRoundMode(rmNearest);
+    end;
+   nValor := RoundTo(Valor, Casas);
+  end;
+ Result := nValor;
+end;
+
 
 End.
 
