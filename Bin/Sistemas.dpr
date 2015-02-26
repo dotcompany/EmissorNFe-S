@@ -13,8 +13,10 @@ uses
   UFtpBackup in '..\Src\UFtpBackup.pas',
   UXMLBackup in '..\Src\UXMLBackup.pas',
   uVerificaUpdate in '..\Src\uVerificaUpdate.pas',
-  UFCartaCorrecao in '..\Src\UFCartaCorrecao.pas' {frmCartaCorrecao};
- // VMXCCePrint in '..\Src\VMXCCePrint.pas';
+  UFCartaCorrecao in '..\Src\UFCartaCorrecao.pas' {frmCartaCorrecao},
+  UConst in '..\Src\UConst.pas';
+
+// VMXCCePrint in '..\Src\VMXCCePrint.pas';
 
 {$R *.res}
 
@@ -22,8 +24,8 @@ Begin
   Application.Initialize;
 
   Application.Title := 'NFe';
-  Application.CreateForm(TFPrincipal, FPrincipal);
-  Application.Run;
+  AApplication.CreateForm(TFPrincipal, FPrincipal);
+  pplication.Run;
 End.
 
 

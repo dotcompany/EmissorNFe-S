@@ -637,11 +637,18 @@ Begin
   If Z = MrYes Then Begin
     // Cancelamento da NF-e Após Ter Sido Validada.
 
-    FNFSEletronica.AcbrNFe.NotasFiscais.Clear;
-    FNFSEletronica.AcbrNFe.NotasFiscais.LoadFromFile(ECaminho.Text);
-    FNFSEletronica.AcbrNFe.Cancelamento(MJustificativa.Text);
+  //  FNFSEletronica.AcbrNFe.NotasFiscais.Clear;
+  //  FNFSEletronica.AcbrNFe.NotasFiscais.LoadFromFile(ECaminho.Text);
+  //  FNFSEletronica.AcbrNFe.Cancelamento(MJustificativa.Text);
 
-    Status := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.cStat;
+  //   Status := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.cStat;
+
+
+
+
+
+
+
 
     // Gravar Mesmo Com Erro.
     // Atualizar a Tabela de Histórico
@@ -710,9 +717,9 @@ Begin
         HistoricoNFe.ParamByName('NOTA_FISCAL').AsInteger := RxCancelamentoNOTA_FISCAL.AsInteger;
         HistoricoNFe.ParamByName('SERIE').AsString        := RxCancelamentoSERIE.AsString;
         HistoricoNFe.ParamByName('DATA_EMISSAO').AsDate   := RxCancelamentoDATA_EMISSAO.AsDateTime;
-        HistoricoNFe.ParamByName('CHAVE').AsString        := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.NFeChave;
+      //  HistoricoNFe.ParamByName('CHAVE').AsString        := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.NFeChave;
         HistoricoNFe.ParamByName('MODELO').Value          := '55';
-        HistoricoNFe.ParamByName('PROTOCOLO').Value       := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.Protocolo;
+    //    HistoricoNFe.ParamByName('PROTOCOLO').Value       := FNFSEletronica.AcbrNFe.WebServices.Cancelamento.Protocolo;
         HistoricoNFe.ParamByName('COD_CLIENTE').Value     := RxCancelamentoCOD_CLIENTE.AsInteger;
         HistoricoNFe.ParamByName('CAMINHO').Value         := QryParametrosNFENFE_CAMINHOXML.AsString + FNFSEletronica.AcbrNFe.WebServices.Consulta.NFeChave + '-nfe.xml';
         HistoricoNFe.ParamByName('FIL_CNPJ').AsString     := RxCancelamentoCNPJCPF.AsString;
@@ -724,12 +731,12 @@ Begin
       Case Status Of
       101 : Begin
 
-              Application.MessageBox(PChar('Cancelamento homologado: ' + #13#10 +
-                                           '                               ' + #13#10 +
-                                           'Status.: ' + IntToStr(Status) + #13#10 +
-                                           'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Cancelamento.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
-
-              FNFSEletronica.AtualizaStatusNotaFiscal(RxCancelamentoNOTA_FISCAL.AsInteger, '6');
+       //       Application.MessageBox(PChar('Cancelamento homologado: ' + #13#10 +
+       //                                    '                               ' + #13#10 +
+      //                                     'Status.: ' + IntToStr(Status) + #13#10 +
+       //                          //          'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Cancelamento.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
+      //
+         //     FNFSEletronica.AtualizaStatusNotaFiscal(RxCancelamentoNOTA_FISCAL.AsInteger, '6');
             End;
 
       218 : Begin

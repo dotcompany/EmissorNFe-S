@@ -1,6 +1,6 @@
 object FNFSEletronica: TFNFSEletronica
-  Left = 379
-  Top = 108
+  Left = 350
+  Top = 212
   BorderStyle = bsSingle
   Caption = 'Vers'#227'o 13.6 Emissor de NF-e.'
   ClientHeight = 642
@@ -14,7 +14,6 @@ object FNFSEletronica: TFNFSEletronica
   KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
-  WindowState = wsMaximized
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -72,7 +71,6 @@ object FNFSEletronica: TFNFSEletronica
       item
         Width = 50
       end>
-    ExplicitWidth = 1340
   end
   object PageControl1: TPageControl
     Left = 0
@@ -85,7 +83,6 @@ object FNFSEletronica: TFNFSEletronica
     ExplicitWidth = 1340
     object TabSheet1: TTabSheet
       Caption = 'Geral'
-      ExplicitWidth = 1332
       object DBGridConsulta: TDBGrid
         Tag = 100
         Left = 0
@@ -358,7 +355,6 @@ object FNFSEletronica: TFNFSEletronica
     Align = alBottom
     BevelInner = bvLowered
     TabOrder = 7
-    ExplicitWidth = 1340
     object Label5: TLabel
       Left = 8
       Top = 57
@@ -437,7 +433,6 @@ object FNFSEletronica: TFNFSEletronica
     Padding.Right = 3
     Padding.Bottom = 3
     TabOrder = 8
-    ExplicitWidth = 1340
     object btnStatusServico: TBitBtn
       Left = 3
       Top = 3
@@ -1860,7 +1855,6 @@ object FNFSEletronica: TFNFSEletronica
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 10
-    ExplicitWidth = 1340
     object shpCancelada: TShape
       Left = 8
       Top = 8
@@ -5749,7 +5743,7 @@ object FNFSEletronica: TFNFSEletronica
     Left = 360
     Top = 264
     Bitmap = {
-      494C010103008C04900410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103008C04980410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6287,7 +6281,7 @@ object FNFSEletronica: TFNFSEletronica
     DocInfo.Producer = 'NF-e Dotcompany 62-3588-6040'
     BufferDocument = True
     DisableHyperlinks = False
-    Left = 456
+    Left = 400
     Top = 264
   end
   object RVDS_NFE: TRvDataSetConnection
@@ -6541,8 +6535,8 @@ object FNFSEletronica: TFNFSEletronica
     Configuracoes.WebServices.AjustaAguardaConsultaRet = True
     OnStatusChange = ACBrNFeStatusChange
     DANFE = IMPRIMENFERAVE1
-    Left = 424
-    Top = 264
+    Left = 912
+    Top = 304
   end
   object qryconshistorico: TSQLQuery
     MaxBlobSize = -1
@@ -6960,8 +6954,8 @@ object FNFSEletronica: TFNFSEletronica
     TamanhoFonte_RazaoSocial = 12
     TamanhoFonte_ANTT = 10
     TributosPercentual = ptValorProdutos
-    Left = 392
-    Top = 264
+    Left = 880
+    Top = 304
   end
   object cdsCartaCorrecao: TClientDataSet
     Aggregates = <>
@@ -8453,5 +8447,18 @@ object FNFSEletronica: TFNFSEletronica
     SQLConnection = Modulo.SQLConexao
     Left = 456
     Top = 424
+  end
+  object ACBrNFSe: TACBrNFSe
+    Configuracoes.Geral.PathSalvar = 'C:\Program Files (x86)\CodeGear\RAD Studio\5.0\bin\'
+    Configuracoes.Geral.ExibirErroSchema = True
+    Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
+    Configuracoes.Geral.RetirarAcentos = True
+    Configuracoes.WebServices.AguardarConsultaRet = 0
+    Configuracoes.WebServices.IntervaloTentativas = 0
+    Configuracoes.WebServices.AjustaAguardaConsultaRet = False
+    Configuracoes.WebServices.CodigoMunicipio = 0
+    Configuracoes.WebServices.ConsultaLoteAposEnvio = True
+    Left = 880
+    Top = 272
   end
 end

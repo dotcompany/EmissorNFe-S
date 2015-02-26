@@ -188,27 +188,17 @@ ValidaCampos;
      InfEvento.nSeqEvento := strtoint(trim(edtSequencia.Text));
    end;
    // envio da carta de correção
-  // FNFSEletronica.ACBrNFe.EnviarCartaCorrecao(StrToInt(idLote));
    FNFSEletronica.ACBrNFe.EnviarEventoNFe(StrToInt(idLote));
 
   //Retorno da carta de correção
   Label4.Caption := 'Respota Carta de Correção';
- { XMLDocument1.XML.Text :=   UTF8Encode(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.RetWS);
-  XMLDocument1.Active:=True;
-  XMLDocument1.DocumentElement.ChildNodes.FindNode('retEnvEvento');
-  XMLDocument1.DocumentElement.ChildNodes.FindNode('retEvento');
-  XMLDocument1.DocumentElement.ChildNodes.FindNode('infEvento');
-  mmTermo.Lines.Text :='Reposta da CC-E:'+XMLDocument1.ChildNodes['xMotivo'].TeXT+'#13';
-  mmTermo.Lines.Text :='Protocolo:'+XMLDocument1.ChildNodes['nProt'].TeXT+'#13';
-  mmTermo.Lines.Text :='              Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:';
-  }
- // if(FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.cStat = 100)then
- // Autorizada := 'SIM'
- // else
- // Autorizada :='NAO';
+
+
+
   mmTermo.Lines.Text :='Autorizada:     '+ Autorizada+'#13';
-  mmTermo.Lines.Add('Reposta da CC-E:    '+ FNFSEletronica.ACBrNFe.WebServices.CartaCorrecao.xMotivo +'#13');
-  mmTermo.Lines.Add('');
+  mmTermo.Lines.Add('Reposta da CC-E:   '+ '#13');
+
+  mmTermo.Lines.Add(UTF8Encode(FNFSEletronica.ACBrNFe.WebServices.EnvEvento.RetWS));
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('');
   mmTermo.Lines.Add('                     Para Conseguir Visualizar/Imprimir a CC-E aguarda alguns minutos e clique no Botão Imprimir:');

@@ -1221,7 +1221,6 @@ type
     QrNotasNOME_TIPO_NOTA_FISCAL: TStringField;
     CdsNotasNOME_TIPO_NOTA_FISCAL: TStringField;
     CdsNotasTIPO_NOTA_FISCAL: TIntegerField;
-    ACBrNFSe: TACBrNFSe;
     QryParametrosNFENFSE_CAMINHOSCHEMAS: TStringField;
     QrItensServico: TSQLQuery;
     DspItensServico: TDataSetProvider;
@@ -1258,6 +1257,7 @@ type
     CdsItensServicoFIL_CNPJ: TStringField;
     CdsItensServicoTOTALIMPOSTOTRANSPARENCIA: TFMTBCDField;
     lblStatusValidar: TLabel;
+    ACBrNFSe: TACBrNFSe;
     procedure FormShow(Sender: TObject);
     procedure btnConsultarClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
