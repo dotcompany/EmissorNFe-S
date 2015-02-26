@@ -652,6 +652,8 @@ object FNFSEletronica: TFNFSEletronica
         ABAEAEABAEAEABADAEABAEAEABAFAFADB5B7B7C5CDD1C8D0D4C8D0D4C8D0D4C8
         D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4}
       Layout = blGlyphTop
+      ExplicitLeft = 97
+      ExplicitTop = 5
     end
     object btnCancelamento: TBitBtn
       Left = 203
