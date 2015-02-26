@@ -1,10 +1,10 @@
 object FNFSEletronica: TFNFSEletronica
-  Left = 550
-  Top = 137
+  Left = 379
+  Top = 108
   BorderStyle = bsSingle
   Caption = 'Vers'#227'o 13.6 Emissor de NF-e.'
   ClientHeight = 642
-  ClientWidth = 1340
+  ClientWidth = 1134
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -60,7 +60,7 @@ object FNFSEletronica: TFNFSEletronica
   object StBar: TStatusBar
     Left = 0
     Top = 614
-    Width = 1340
+    Width = 1134
     Height = 28
     Panels = <
       item
@@ -72,22 +72,25 @@ object FNFSEletronica: TFNFSEletronica
       item
         Width = 50
       end>
+    ExplicitWidth = 1340
   end
   object PageControl1: TPageControl
     Left = 0
     Top = 171
-    Width = 1340
+    Width = 1134
     Height = 368
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 5
+    ExplicitWidth = 1340
     object TabSheet1: TTabSheet
       Caption = 'Geral'
+      ExplicitWidth = 1332
       object DBGridConsulta: TDBGrid
         Tag = 100
         Left = 0
         Top = 0
-        Width = 1332
+        Width = 1126
         Height = 340
         Align = alClient
         DataSource = DsNotas
@@ -132,7 +135,7 @@ object FNFSEletronica: TFNFSEletronica
             Title.Font.Height = -11
             Title.Font.Name = 'MS Sans Serif'
             Title.Font.Style = []
-            Width = 100
+            Width = 63
             Visible = True
           end
           item
@@ -223,7 +226,7 @@ object FNFSEletronica: TFNFSEletronica
             Title.Font.Height = -11
             Title.Font.Name = 'MS Sans Serif'
             Title.Font.Style = []
-            Width = 136
+            Width = 69
             Visible = True
           end>
       end
@@ -231,20 +234,25 @@ object FNFSEletronica: TFNFSEletronica
     object TabSheet2: TTabSheet
       Caption = '...'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object PageControl2: TPageControl
         Left = 0
         Top = 0
-        Width = 1332
+        Width = 1126
         Height = 340
         ActivePage = TabSheet5
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 1332
         object TabSheet5: TTabSheet
           Caption = 'Respostas'
           object MemoResp: TMemo
             Left = 0
             Top = 0
-            Width = 1324
+            Width = 1118
             Height = 312
             Align = alClient
             ScrollBars = ssVertical
@@ -254,21 +262,17 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet6: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
-            Width = 795
-            Height = 183
+            Width = 1118
+            Height = 312
             Align = alClient
             TabOrder = 0
-            ExplicitWidth = 836
-            ExplicitHeight = 206
+            ExplicitWidth = 795
+            ExplicitHeight = 183
             ControlData = {
-              4C0000002A520000EA1200000000000000000000000000000000000000000000
+              4C0000008C7300003F2000000000000000000000000000000000000000000000
               000000004C000000000000000000000001000000E0D057007335CF11AE690800
               2B2E126208000000000000004C0000000114020000000000C000000000000046
               8000000000000000000000000000000000000000000000000000000000000000
@@ -278,15 +282,11 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet8: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoLog: TMemo
             Left = 0
             Top = 0
-            Width = 795
-            Height = 183
+            Width = 1118
+            Height = 312
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
@@ -295,28 +295,29 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet9: TTabSheet
           Caption = 'NFe'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
-            Width = 1324
+            Width = 1118
             Height = 312
             Align = alClient
             Indent = 19
             TabOrder = 0
+            ExplicitWidth = 1324
           end
         end
         object TabSheet10: TTabSheet
           Caption = 'Retorno Completo WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
-            Width = 795
-            Height = 183
+            Width = 1118
+            Height = 312
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
@@ -325,15 +326,11 @@ object FNFSEletronica: TFNFSEletronica
         object Dados: TTabSheet
           Caption = 'Dados'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoDados: TMemo
             Left = 0
             Top = 0
-            Width = 795
-            Height = 183
+            Width = 1118
+            Height = 312
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
@@ -356,11 +353,12 @@ object FNFSEletronica: TFNFSEletronica
   object Panel3: TPanel
     Left = 0
     Top = 539
-    Width = 1340
+    Width = 1134
     Height = 34
     Align = alBottom
     BevelInner = bvLowered
     TabOrder = 7
+    ExplicitWidth = 1340
     object Label5: TLabel
       Left = 8
       Top = 57
@@ -430,7 +428,7 @@ object FNFSEletronica: TFNFSEletronica
   object Panel4: TPanel
     Left = 0
     Top = 0
-    Width = 1340
+    Width = 1134
     Height = 65
     Align = alTop
     BevelOuter = bvNone
@@ -439,6 +437,7 @@ object FNFSEletronica: TFNFSEletronica
     Padding.Right = 3
     Padding.Bottom = 3
     TabOrder = 8
+    ExplicitWidth = 1340
     object btnStatusServico: TBitBtn
       Left = 3
       Top = 3
@@ -1543,11 +1542,12 @@ object FNFSEletronica: TFNFSEletronica
   object Panel2: TPanel
     Left = 0
     Top = 65
-    Width = 1340
+    Width = 1134
     Height = 106
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 9
+    ExplicitWidth = 1340
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -1855,11 +1855,12 @@ object FNFSEletronica: TFNFSEletronica
   object Panel1: TPanel
     Left = 0
     Top = 573
-    Width = 1340
+    Width = 1134
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 10
+    ExplicitWidth = 1340
     object shpCancelada: TShape
       Left = 8
       Top = 8
@@ -5748,7 +5749,7 @@ object FNFSEletronica: TFNFSEletronica
     Left = 360
     Top = 264
     Bitmap = {
-      494C010103008C048C0410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103008C04900410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6531,6 +6532,8 @@ object FNFSEletronica: TFNFSEletronica
     Configuracoes.Geral.PathSalvar = 'C:\Arquivos de programas\Borland\Delphi7\Bin\'
     Configuracoes.Geral.ExibirErroSchema = True
     Configuracoes.Geral.FormatoAlerta = 'TAG:%TAGNIVEL% ID:%ID%/%TAG%(%DESCRICAO%) - %MSG%.'
+    Configuracoes.Geral.RetirarAcentos = True
+    Configuracoes.Geral.ValidarDigest = False
     Configuracoes.WebServices.Visualizar = True
     Configuracoes.WebServices.UF = 'SP'
     Configuracoes.WebServices.AguardarConsultaRet = 0
@@ -6952,6 +6955,7 @@ object FNFSEletronica: TFNFSEletronica
     NFeCancelada = False
     LocalImpCanhoto = 0
     ImprimeItens = True
+    ViaConsumidor = True
     EspessuraBorda = 1
     TamanhoFonte_RazaoSocial = 12
     TamanhoFonte_ANTT = 10
@@ -8296,16 +8300,6 @@ object FNFSEletronica: TFNFSEletronica
     DataSet = CdsItens
     Left = 696
     Top = 360
-  end
-  object ACBrNFSe: TACBrNFSe
-    Configuracoes.Geral.PathSalvar = 'C:\Program Files\CodeGear\RAD Studio\5.0\bin\'
-    Configuracoes.WebServices.AguardarConsultaRet = 0
-    Configuracoes.WebServices.IntervaloTentativas = 0
-    Configuracoes.WebServices.AjustaAguardaConsultaRet = False
-    Configuracoes.WebServices.CodigoMunicipio = 0
-    Configuracoes.WebServices.ConsultaLoteAposEnvio = True
-    Left = 488
-    Top = 264
   end
   object QrItensServico: TSQLQuery
     MaxBlobSize = -1
