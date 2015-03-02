@@ -80,9 +80,12 @@ object FNFSEletronica: TFNFSEletronica
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 5
-    ExplicitWidth = 1340
     object TabSheet1: TTabSheet
       Caption = 'Geral'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object DBGridConsulta: TDBGrid
         Tag = 100
         Left = 0
@@ -246,6 +249,10 @@ object FNFSEletronica: TFNFSEletronica
         ExplicitWidth = 1332
         object TabSheet5: TTabSheet
           Caption = 'Respostas'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoResp: TMemo
             Left = 0
             Top = 0
@@ -259,6 +266,10 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet6: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
@@ -279,6 +290,10 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet8: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoLog: TMemo
             Left = 0
             Top = 0
@@ -304,12 +319,15 @@ object FNFSEletronica: TFNFSEletronica
             Align = alClient
             Indent = 19
             TabOrder = 0
-            ExplicitWidth = 1324
           end
         end
         object TabSheet10: TTabSheet
           Caption = 'Retorno Completo WS'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object memoRespWS: TMemo
             Left = 0
             Top = 0
@@ -323,6 +341,10 @@ object FNFSEletronica: TFNFSEletronica
         object Dados: TTabSheet
           Caption = 'Dados'
           ImageIndex = 5
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object MemoDados: TMemo
             Left = 0
             Top = 0
@@ -652,8 +674,6 @@ object FNFSEletronica: TFNFSEletronica
         ABAEAEABAEAEABADAEABAEAEABAFAFADB5B7B7C5CDD1C8D0D4C8D0D4C8D0D4C8
         D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4}
       Layout = blGlyphTop
-      ExplicitLeft = 97
-      ExplicitTop = 5
     end
     object btnCancelamento: TBitBtn
       Left = 203
@@ -1544,7 +1564,6 @@ object FNFSEletronica: TFNFSEletronica
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 9
-    ExplicitWidth = 1340
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -5745,7 +5764,7 @@ object FNFSEletronica: TFNFSEletronica
     Left = 360
     Top = 264
     Bitmap = {
-      494C010103008C04980410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010300A404A40410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

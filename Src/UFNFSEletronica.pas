@@ -2065,8 +2065,13 @@ VAR
 begin
    AcbrNFe.NotasFiscais.Clear;
 
+//   AcbrNFe.Configuracoes.Geral.PathSchemas := QryParametrosNFENFSE_CAMINHOSCHEMAS.AsString;
+//   AcbrNFe.Configuracoes.WebServices.UF := 'AM';
+
+//   ACBrNFSe.Configuracoes.Geral.PathSchemas := QryParametrosNFENFSE_CAMINHOSCHEMAS.AsString;
+
    // teste
-   AcbrNFe.Configuracoes.Geral.VersaoDF := ve310; 
+   AcbrNFe.Configuracoes.Geral.VersaoDF := ve310;
 
 
    IMPRIMENFERAVE1.Logo := QryParametrosNFENFE_GERALCAMINHOLOGOMARCA.AsString;
@@ -2142,7 +2147,7 @@ begin
                Ide.tpAmb     := StrToTpAmb(Ok, Ambiente);
 
                Case FormaContigencia Of
-                  1 : Ide.tpEmis := teNormal;
+                  1 : Ide.tpEmis := pcnConversao.teNormal;
                   2 : Ide.tpEmis := teContingencia;
                   3 : Ide.tpEmis := teSCAN;
                   4 : Ide.tpEmis := teDPEC;
@@ -4698,7 +4703,7 @@ begin
             Ide.tpAmb     := StrToTpAmb(Ok, Ambiente);
 
             Case FormaContigencia Of
-               1 : Ide.tpEmis := teNormal;
+               1 : Ide.tpEmis := pcnConversao.teNormal;
                2 : Ide.tpEmis := teContingencia;
                3 : Ide.tpEmis := teSCAN;
                4 : Ide.tpEmis := teDPEC;
@@ -5758,7 +5763,7 @@ begin
         Application.MessageBox(PChar('Cancelamento homologado: ' + #13#10 +
                                            '                               ' + #13#10 +
                                            'Status.: ' + IntToStr(Status) + #13#10 +
-                                           'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Cancelamento.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
+                                           'Motivo.: ' + FNFSEletronica.AcbrNFe.WebServices.Retorno.xMotivo), 'A T E N Ç Ã O', MB_OK + MB_ICONQUESTION);
         AtualizaStatusNotaFiscal(CdsNotasNOTA_FISCAL.AsInteger, '6');
 
 

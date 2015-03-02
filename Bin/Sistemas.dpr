@@ -24,8 +24,8 @@ Begin
   Application.Initialize;
 
   Application.Title := 'NFe';
-  AApplication.CreateForm(TFPrincipal, FPrincipal);
-  pplication.Run;
+  Application.CreateForm(TFPrincipal, FPrincipal);
+  Application.Run;
 End.
 
 
