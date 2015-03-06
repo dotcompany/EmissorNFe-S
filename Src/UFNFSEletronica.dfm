@@ -1,10 +1,10 @@
 object FNFSEletronica: TFNFSEletronica
-  Left = 350
-  Top = 212
+  Left = 507
+  Top = 196
   BorderStyle = bsSingle
-  Caption = 'Vers'#227'o 13.6 Emissor de NF-e.'
+  Caption = 'Vers'#227'o 2015.001 Emissor de NF-e.'
   ClientHeight = 642
-  ClientWidth = 1134
+  ClientWidth = 1070
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -59,7 +59,7 @@ object FNFSEletronica: TFNFSEletronica
   object StBar: TStatusBar
     Left = 0
     Top = 614
-    Width = 1134
+    Width = 1070
     Height = 28
     Panels = <
       item
@@ -71,27 +71,29 @@ object FNFSEletronica: TFNFSEletronica
       item
         Width = 50
       end>
+    ExplicitWidth = 1134
   end
   object PageControl1: TPageControl
     Left = 0
-    Top = 171
-    Width = 1134
-    Height = 368
+    Top = 189
+    Width = 1070
+    Height = 350
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 5
+    ExplicitTop = 171
+    ExplicitWidth = 1134
+    ExplicitHeight = 368
     object TabSheet1: TTabSheet
       Caption = 'Geral'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 1126
+      ExplicitHeight = 340
       object DBGridConsulta: TDBGrid
         Tag = 100
         Left = 0
         Top = 0
-        Width = 1126
-        Height = 340
+        Width = 1062
+        Height = 322
         Align = alClient
         DataSource = DsNotas
         Font.Charset = ANSI_CHARSET
@@ -116,6 +118,11 @@ object FNFSEletronica: TFNFSEletronica
             Alignment = taCenter
             Expanded = False
             FieldName = 'MARCADO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Alignment = taCenter
             Title.Caption = 'Selecionar'
             Title.Font.Charset = DEFAULT_CHARSET
@@ -129,6 +136,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'NOME_TIPO_NOTA_FISCAL'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'Tipo'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -141,11 +153,23 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'TIPO_NOTA_FISCAL'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
+            Title.Caption = 'TIPO DE NOTA'
+            Width = 125
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'DATA_EMISSAO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'Data Emiss'#227'o'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -158,6 +182,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'NOTA_FISCAL'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Alignment = taRightJustify
             Title.Caption = 'N'#186' Nota Fiscal'
             Title.Font.Charset = DEFAULT_CHARSET
@@ -171,6 +200,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'COD_CLIENTE'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'Cliente'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -183,6 +217,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'RAZAO_SOCIAL'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'Raz'#227'o Social'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -195,6 +234,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'CNPJCPF'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'CNPJ/CPF'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -207,6 +251,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'VALOR_NOTA'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Alignment = taRightJustify
             Title.Caption = 'Valor Nota'
             Title.Font.Charset = DEFAULT_CHARSET
@@ -220,6 +269,11 @@ object FNFSEletronica: TFNFSEletronica
           item
             Expanded = False
             FieldName = 'STATUS'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'Arial'
+            Font.Style = []
             Title.Caption = 'Status'
             Title.Font.Charset = DEFAULT_CHARSET
             Title.Font.Color = clWindowText
@@ -241,46 +295,45 @@ object FNFSEletronica: TFNFSEletronica
       object PageControl2: TPageControl
         Left = 0
         Top = 0
-        Width = 1126
-        Height = 340
+        Width = 1062
+        Height = 322
         ActivePage = TabSheet5
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 1332
+        ExplicitHeight = 340
         object TabSheet5: TTabSheet
           Caption = 'Respostas'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 1060
+          ExplicitHeight = 312
           object MemoResp: TMemo
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
+            ExplicitWidth = 1060
+            ExplicitHeight = 312
           end
         end
         object TabSheet6: TTabSheet
           Caption = 'XML Resposta'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 1060
+          ExplicitHeight = 312
           object WBResposta: TWebBrowser
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             TabOrder = 0
-            ExplicitWidth = 795
-            ExplicitHeight = 183
+            ExplicitWidth = 1118
+            ExplicitHeight = 312
             ControlData = {
-              4C0000008C7300003F2000000000000000000000000000000000000000000000
+              4C000000EF6C0000631E00000000000000000000000000000000000000000000
               000000004C000000000000000000000001000000E0D057007335CF11AE690800
               2B2E126208000000000000004C0000000114020000000000C000000000000046
               8000000000000000000000000000000000000000000000000000000000000000
@@ -290,18 +343,18 @@ object FNFSEletronica: TFNFSEletronica
         object TabSheet8: TTabSheet
           Caption = 'Log'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 1060
+          ExplicitHeight = 312
           object memoLog: TMemo
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
+            ExplicitWidth = 1060
+            ExplicitHeight = 312
           end
         end
         object TabSheet9: TTabSheet
@@ -314,45 +367,47 @@ object FNFSEletronica: TFNFSEletronica
           object trvwNFe: TTreeView
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             Indent = 19
             TabOrder = 0
+            ExplicitWidth = 1118
+            ExplicitHeight = 312
           end
         end
         object TabSheet10: TTabSheet
           Caption = 'Retorno Completo WS'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 1060
+          ExplicitHeight = 312
           object memoRespWS: TMemo
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
+            ExplicitWidth = 1060
+            ExplicitHeight = 312
           end
         end
         object Dados: TTabSheet
           Caption = 'Dados'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 1060
+          ExplicitHeight = 312
           object MemoDados: TMemo
             Left = 0
             Top = 0
-            Width = 1118
-            Height = 312
+            Width = 1054
+            Height = 294
             Align = alClient
             ScrollBars = ssVertical
             TabOrder = 0
+            ExplicitWidth = 1060
+            ExplicitHeight = 312
           end
         end
       end
@@ -372,11 +427,12 @@ object FNFSEletronica: TFNFSEletronica
   object Panel3: TPanel
     Left = 0
     Top = 539
-    Width = 1134
+    Width = 1070
     Height = 34
     Align = alBottom
     BevelInner = bvLowered
     TabOrder = 7
+    ExplicitWidth = 1134
     object Label5: TLabel
       Left = 8
       Top = 57
@@ -446,7 +502,7 @@ object FNFSEletronica: TFNFSEletronica
   object Panel4: TPanel
     Left = 0
     Top = 0
-    Width = 1134
+    Width = 1070
     Height = 65
     Align = alTop
     BevelOuter = bvNone
@@ -455,6 +511,7 @@ object FNFSEletronica: TFNFSEletronica
     Padding.Right = 3
     Padding.Bottom = 3
     TabOrder = 8
+    ExplicitWidth = 1134
     object btnStatusServico: TBitBtn
       Left = 3
       Top = 3
@@ -462,6 +519,12 @@ object FNFSEletronica: TFNFSEletronica
       Height = 59
       Align = alLeft
       Caption = 'Status  servi'#231'o'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
       OnClick = btnStatusServicoClick
       Glyph.Data = {
@@ -572,6 +635,12 @@ object FNFSEletronica: TFNFSEletronica
       Height = 59
       Align = alLeft
       Caption = 'Validar nota'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 1
       OnClick = btnValidarNFeClick
       Glyph.Data = {
@@ -682,6 +751,12 @@ object FNFSEletronica: TFNFSEletronica
       Height = 59
       Align = alLeft
       Caption = 'Cancelamento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 2
       OnClick = btnCancelamentoClick
       Glyph.Data = {
@@ -901,7 +976,13 @@ object FNFSEletronica: TFNFSEletronica
       Width = 100
       Height = 59
       Align = alLeft
-      Caption = 'Imprimir DANFE'
+      Caption = 'Imprimir'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 4
       OnClick = btnReemitirDanfeClick
       Glyph.Data = {
@@ -1114,6 +1195,8 @@ object FNFSEletronica: TFNFSEletronica
         D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8
         D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4C8D0D4}
       Layout = blGlyphTop
+      ExplicitLeft = 509
+      ExplicitTop = 35
     end
     object btnEnviarEMail: TBitBtn
       Left = 603
@@ -1122,6 +1205,12 @@ object FNFSEletronica: TFNFSEletronica
       Height = 59
       Align = alLeft
       Caption = 'Enviar E-Mail'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 6
       OnClick = btnReemitirDanfeClick
       Glyph.Data = {
@@ -1559,59 +1648,61 @@ object FNFSEletronica: TFNFSEletronica
   object Panel2: TPanel
     Left = 0
     Top = 65
-    Width = 1134
-    Height = 106
+    Width = 1070
+    Height = 124
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 9
+    ExplicitTop = 68
+    ExplicitWidth = 1076
     object Label1: TLabel
       Left = 8
-      Top = 8
-      Width = 76
-      Height = 13
+      Top = 4
+      Width = 112
+      Height = 19
       Caption = 'Tipo Consulta'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label2: TLabel
       Left = 8
-      Top = 56
-      Width = 66
-      Height = 13
+      Top = 67
+      Width = 94
+      Height = 19
       Caption = 'Status nota'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblTipo: TLabel
       Left = 208
-      Top = 8
-      Width = 76
-      Height = 13
+      Top = 5
+      Width = 110
+      Height = 19
       Caption = 'Data Emiss'#227'o'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object lblDtFinal: TLabel
-      Left = 328
-      Top = 32
-      Width = 7
-      Height = 13
+      Left = 325
+      Top = 30
+      Width = 10
+      Height = 19
       Caption = 'a'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
@@ -1619,13 +1710,13 @@ object FNFSEletronica: TFNFSEletronica
     end
     object Label4: TLabel
       Left = 464
-      Top = 8
-      Width = 135
-      Height = 13
+      Top = 5
+      Width = 200
+      Height = 19
       Caption = 'Escolha Filial p/ Emiss'#227'o'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
@@ -1649,16 +1740,16 @@ object FNFSEletronica: TFNFSEletronica
     end
     object CbTipoConsulta: TComboBox
       Left = 8
-      Top = 24
+      Top = 25
       Width = 188
-      Height = 21
+      Height = 31
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -19
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemHeight = 13
+      ItemHeight = 23
       ItemIndex = 0
       ParentFont = False
       TabOrder = 0
@@ -1669,16 +1760,16 @@ object FNFSEletronica: TFNFSEletronica
     end
     object cbStatusNota: TComboBox
       Left = 8
-      Top = 72
-      Width = 188
-      Height = 21
+      Top = 88
+      Width = 327
+      Height = 31
       Style = csDropDownList
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -19
       Font.Name = 'Tahoma'
       Font.Style = []
-      ItemHeight = 13
+      ItemHeight = 23
       ParentFont = False
       TabOrder = 1
       Items.Strings = (
@@ -1695,41 +1786,59 @@ object FNFSEletronica: TFNFSEletronica
     end
     object EDataInicial: TJvDateEdit
       Left = 208
-      Top = 24
+      Top = 29
       Width = 110
-      Height = 21
+      Height = 27
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 2
     end
     object EDataFinal: TJvDateEdit
       Left = 344
-      Top = 24
+      Top = 29
       Width = 110
-      Height = 21
+      Height = 27
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 3
     end
     object DBLookupComboBox1: TDBLookupComboBox
       Left = 464
-      Top = 24
-      Width = 356
-      Height = 21
+      Top = 25
+      Width = 601
+      Height = 31
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = []
       KeyField = 'FIL_CODIGO'
       ListField = 'FIL_NOMEFANTASIA'
       ListSource = DslookFiliais
+      ParentFont = False
       TabOrder = 4
       Visible = False
       OnClick = DBLookupComboBox1Click
     end
     object btnConsultar: TBitBtn
-      Left = 464
-      Top = 56
-      Width = 111
+      Left = 344
+      Top = 80
+      Width = 146
       Height = 38
       Cursor = crHandPoint
       Hint = 'Consultar'
       Caption = 'Consultar'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
@@ -1871,11 +1980,12 @@ object FNFSEletronica: TFNFSEletronica
   object Panel1: TPanel
     Left = 0
     Top = 573
-    Width = 1134
+    Width = 1070
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 10
+    ExplicitWidth = 1134
     object shpCancelada: TShape
       Left = 8
       Top = 8
@@ -5764,7 +5874,7 @@ object FNFSEletronica: TFNFSEletronica
     Left = 360
     Top = 264
     Bitmap = {
-      494C01010300A404A40410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010300A404A80410001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -6522,8 +6632,8 @@ object FNFSEletronica: TFNFSEletronica
       DBF9FA3F05576964746805003833333333339302400000}
   end
   object PopupMenuUtilitarios: TPopupMenu
-    Left = 841
-    Top = 13
+    Left = 961
+    Top = 141
     object FazerbackupXMLdalista1: TMenuItem
       Caption = 'Fazer backup XML da lista'
       OnClick = FazerbackupXMLdalista1Click
